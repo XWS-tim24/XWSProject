@@ -16,10 +16,10 @@ func (service *AvailableDateService) Create(availableDate *domain.AvailableDate)
 	if availableDate.StartDate.After(availableDate.EndDate) {
 		return fmt.Errorf("start date cannot be after end date")
 	}
-	if !service.AccommodationRepository.ExistsById(availableDate.AccommodationId.String()) {
-		return fmt.Errorf(fmt.Sprintf("Accommodation with id %s not found", availableDate.AccommodationId.String()))
+	if !service.AccommodationRepository.ExistsById(availableDate.AccommodationId) {
+		return fmt.Errorf(fmt.Sprintf("Accommodation with id %s not found", availableDate.AccommodationId))
 	}
-	if !service.AvailableDateRepository.TimeSlotFree(availableDate.AccommodationId.String(), availableDate.StartDate, availableDate.EndDate) {
+	if !service.AvailableDateRepository.TimeSlotFree(availableDate.AccommodationId, availableDate.StartDate, availableDate.EndDate) {
 		return fmt.Errorf("time slot already taken")
 	}
 	err := service.AvailableDateRepository.Create(availableDate)
