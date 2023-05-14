@@ -3,6 +3,7 @@ package repo
 import (
 	"Accomodation-reservation-Service/domain"
 	"fmt"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -65,7 +66,7 @@ func (repo *ReservationRequestRepository) GetAllPendingForAccomodation(accomodat
 }
 
 // POMOCNE
-func (repo *ReservationRequestRepository) AlreadyReservedForDate(reservationRequest *domain.ReservationRequest) bool {
+func (repo *ReservationRequestRepository) AlreadyReservedForDate(accomodationId string, startDate time.Time, endDate time.Time) bool {
 	var exists bool
 	existsQuery := `SELECT EXISTS(
 		SELECT 1 FROM reservations r, reservation_requests rr WHERE r.request_id = rr.id
@@ -77,10 +78,10 @@ func (repo *ReservationRequestRepository) AlreadyReservedForDate(reservationRequ
 	 )`
 	existsStmt := repo.DatabaseConnection.Raw(existsQuery,
 		domain.Active,
-		reservationRequest.AccomodationId,
-		reservationRequest.StartDate,
-		reservationRequest.EndDate,
-		reservationRequest.StartDate, reservationRequest.EndDate)
+		accomodationId,
+		startDate,
+		endDate,
+		startDate, endDate)
 	existsStmt.Scan(&exists)
 	return exists
 }

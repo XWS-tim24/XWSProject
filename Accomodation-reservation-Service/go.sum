@@ -1,7 +1,7 @@
-github.com/XWS-tim24/Common/common v0.0.0-20230514030615-39e66a2745f4 h1:BrG3XFwea1pcknk3nylDXCfvwajc7v1Q9X2LGL/iAe4=
-github.com/XWS-tim24/Common/common v0.0.0-20230514030615-39e66a2745f4/go.mod h1:E+b61UtmbAqj4jBpQkZcXczoImnRJIfN0wffpLdnvCw=
 github.com/XWS-tim24/Common/common v0.0.0-20230514040734-dbba42d35ef1 h1:johr5JIZkbvx/3nCFmr27sZ1LAXGSYxJBEB6+OQsfls=
 github.com/XWS-tim24/Common/common v0.0.0-20230514040734-dbba42d35ef1/go.mod h1:E+b61UtmbAqj4jBpQkZcXczoImnRJIfN0wffpLdnvCw=
+github.com/XWS-tim24/Common/common v0.0.0-20230514140241-f7f069b3cc2f h1:3GbQf9wD5UsMqlpsridz6H6qedO+3WT8+O/rf7N/6po=
+github.com/XWS-tim24/Common/common v0.0.0-20230514140241-f7f069b3cc2f/go.mod h1:E+b61UtmbAqj4jBpQkZcXczoImnRJIfN0wffpLdnvCw=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
