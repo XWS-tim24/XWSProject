@@ -28,7 +28,7 @@ func NewConfig() *Config {
 		DBName:                   os.Getenv("ACCOMMODATION_RESERVATION_DB_NAME"),
 		DBUser:                   os.Getenv("ACCOMMODATION_RESERVATION_DB_USER"),
 		DBPass:                   os.Getenv("ACCOMMODATION_RESERVATION_DB_PASS"),
-		AccommodationServiceHost: os.Getenv("ACCOMMODATION_RESERVATION_SERVICE_HOST"),
-		AccommodationServicePort: os.Getenv("ACCOMMODATION_RESERVATION_SERVICE_PORT"),
+		AccommodationServiceHost: os.Getenv("ACCOMMODATION_SERVICE_HOST"),
+		AccommodationServicePort: os.Getenv("ACCOMMODATION_SERVICE_PORT"),
 	}
 }
