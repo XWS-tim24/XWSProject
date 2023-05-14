@@ -33,7 +33,7 @@ func (service *ReservationRequestService) Create(reservationRequest *domain.Rese
 
 	reservationRequest.Status = domain.Pending
 	reservationRequest.Deleted = false
-	if service.alreadyReservedForDate(reservationRequest) { //ili 2
+	if service.AlreadyReservedForDate(reservationRequest.AccomodationId, reservationRequest.StartDate, reservationRequest.EndDate) { //ili 2
 		return service.createDenied(reservationRequest)
 	}
 	//automatska_potvrda := true //3.
@@ -105,8 +105,8 @@ func (service *ReservationRequestService) GetAllPendingForAccomodation(userId st
 }
 
 // POMOCNE METODE
-func (service *ReservationRequestService) alreadyReservedForDate(reservationRequest *domain.ReservationRequest) bool {
-	exists := service.ReservationRequestRepo.AlreadyReservedForDate(reservationRequest)
+func (service *ReservationRequestService) AlreadyReservedForDate(accomodationId string, startDate time.Time, endDate time.Time) bool {
+	exists := service.ReservationRequestRepo.AlreadyReservedForDate(accomodationId, startDate, endDate)
 	return exists
 }
 

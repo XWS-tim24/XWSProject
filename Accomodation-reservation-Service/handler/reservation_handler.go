@@ -161,6 +161,16 @@ func (handler *ReservationHandler) CancelReservation(ctx context.Context, reques
 	return response, nil
 }
 
+func (handler *ReservationHandler) AlreadyReservedForDate(ctx context.Context, request *pb.AlreadyReservedForDateRequest) (*pb.AlreadyReservedForDateResponse, error) {
+	print("Stigao handler")
+	alreadyReserved := handler.ReservationRequestService.AlreadyReservedForDate(request.DateAndAccomodationDTO.AccommodationId, request.DateAndAccomodationDTO.StartDate.AsTime(), request.DateAndAccomodationDTO.EndDate.AsTime())
+
+	response := &pb.AlreadyReservedForDateResponse{
+		AlreadyReserved: alreadyReserved,
+	}
+	return response, nil
+}
+
 /*rpc DeleteReservationRequest(GetByIdRequest) returns(ReservationRequestResponse) {
         	option (google.api.http) = {
 			put: "/reservationRequests/delete/{id}"
