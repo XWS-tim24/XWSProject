@@ -37,9 +37,6 @@ func (server *Server) initHandlers() {
 		panic(err)
 	}
 
-	server.config.AccommodationHost = "localhost"
-	server.config.AccommodationPort = "8080"
-
 	accommodationEmdpoint := fmt.Sprintf("%s:%s", server.config.AccommodationHost, server.config.AccommodationPort)
 	err = accommodationGw.RegisterAccommodationServiceHandlerFromEndpoint(context.TODO(), server.mux, accommodationEmdpoint, opts)
 	if err != nil {
@@ -49,6 +46,5 @@ func (server *Server) initHandlers() {
 }
 
 func (server *Server) Start() {
-	server.config.Port = "8000"
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", server.config.Port), server.mux))
 }
