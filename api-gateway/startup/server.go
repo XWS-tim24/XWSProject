@@ -30,11 +30,16 @@ func NewServer(config *cfg.Config) *Server {
 
 func (server *Server) initHandlers() {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+
 	reservationEndpoint := fmt.Sprintf("%s:%s", server.config.AccommodationReservationHost, server.config.AccommodationReservationPort)
 	err := reservationGw.RegisterAccommodationReservationServiceHandlerFromEndpoint(context.TODO(), server.mux, reservationEndpoint, opts)
 	if err != nil {
 		panic(err)
 	}
+
+	server.config.AccommodationHost = "localhost"
+	server.config.AccommodationPort = "8080"
+
 	accommodationEmdpoint := fmt.Sprintf("%s:%s", server.config.AccommodationHost, server.config.AccommodationPort)
 	err = accommodationGw.RegisterAccommodationServiceHandlerFromEndpoint(context.TODO(), server.mux, accommodationEmdpoint, opts)
 	if err != nil {
@@ -44,5 +49,6 @@ func (server *Server) initHandlers() {
 }
 
 func (server *Server) Start() {
+	server.config.Port = "8000"
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", server.config.Port), server.mux))
 }

@@ -24,13 +24,13 @@ func (handler *AccommodationHandler) CreateAcc(ctx context.Context, pbAcc *pb.Cr
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	return &pb.CreateAccommodationResponse{}, nil
 }
 
 func (handler *AccommodationHandler) GetAccommodationById(ctx context.Context, req *pb.GetByIdRequest) (*pb.CreateAccommodationResponse, error) {
 	id := req.Id
 
-	log.Printf("Accommodation with id %s", id)
+	println("Accommodation with id %s", id)
 	accommodation, err := handler.AccommodationService.GetById(id)
 
 	if err != nil {
@@ -97,5 +97,18 @@ func (handler *AccommodationHandler) UpdateAvailableDate(ctx context.Context, re
 		fmt.Println(err)
 		return nil, err
 	}
-	return nil, nil
+	return &pb.UpdateAvailableDateResponse{}, nil
+}
+
+func (handler *AccommodationHandler) TimeSlotAvailableForAccommodation(ctx context.Context, req *pb.TimeSlotAvailableRequest) (*pb.TimeSlotAvailableResponse, error) {
+	dto := mapToTimeSlotAvailableDTO(req.AvailableTimeSlotDTO)
+
+	timeSlotAvailable, err := handler.AvailableDateService.TimeSlotAvailableForAccommodation(dto)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	response := &pb.TimeSlotAvailableResponse{}
+	response.Available = timeSlotAvailable
+	return response, nil
 }

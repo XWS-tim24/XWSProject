@@ -103,3 +103,14 @@ func mapToPricingTypeDTO(pricingType pb.AvailableDateDTO_PricingType) domain.Pri
 	}
 	return domain.PER_ACCOMMODATION
 }
+
+func mapToTimeSlotAvailableDTO(pbUTimeSlotDTO *pb.AvailableTimeSlotDTO) *dto.AvailableTimeSlotDTO {
+
+	updateDto := &dto.AvailableTimeSlotDTO{
+		AccommodationId: pbUTimeSlotDTO.AccommodationId,
+		StartDate:       pbUTimeSlotDTO.StartDate.AsTime(),
+		EndDate:         pbUTimeSlotDTO.EndDate.AsTime(),
+	}
+
+	return updateDto
+}

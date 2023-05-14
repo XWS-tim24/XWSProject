@@ -25,6 +25,7 @@ func (repo *AccommodationRepository) GetById(id string) (*domain.Accommodation, 
 	accommodation := &domain.Accommodation{}
 	dbResult := repo.DatabaseConnection.First(accommodation, "id = ?", id)
 	if dbResult != nil {
+		println("Gresdka pri get by id accommodation")
 		return accommodation, dbResult.Error
 	}
 	return accommodation, nil
