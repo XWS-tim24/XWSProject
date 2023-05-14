@@ -1,13 +1,12 @@
 version: "3.8"
 
 services:
-  
- accommodation_service:
+  accommodation_service:
     image: accommodation_service
     container_name: accommodation_service
     build:
       context: .
-      dockerfile: ./Accommodation-Service/Dockerfile
+      dockerfile: ./Accomodation-Service/Dockerfile
     restart: on-failure
     environment:
       ACCOMMODATION_SERVICE_PORT: ${ACCOMMODATION_SERVICE_PORT}
@@ -28,7 +27,7 @@ services:
     container_name: reservation_service
     build:
       context: .
-      dockerfile: ./Accommodation-reservation-Service/Dockerfile
+      dockerfile: ./Accomodation-reservation-Service/Dockerfile
     restart: on-failure
     environment:
       ACCOMMODATION_RESERVATION_SERVICE_PORT: ${ACCOMMODATION_RESERVATION_SERVICE_PORT}
@@ -46,10 +45,10 @@ services:
 
   api_gateway:
     image: api_gateway
-    container_name: api_gateway
+    container_name: api-gateway
     build:
       context: .
-      dockerfile: ./api_gateway/Dockerfile
+      dockerfile: ./api-gateway/Dockerfile
     restart: on-failure
     ports:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}
@@ -75,7 +74,7 @@ services:
     networks:
       - network
       
-   reservation_db:
+  reservation_db:
     image: postgres
     container_name: reservation_db
     restart: on-failure
