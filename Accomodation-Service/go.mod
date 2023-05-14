@@ -3,7 +3,7 @@ module Accomodation-Service
 go 1.20
 
 require (
-	github.com/XWS-tim24/Common/common v0.0.0-20230514031915-805d654c1e41
+	github.com/XWS-tim24/Common/common v0.0.0-20230514040734-dbba42d35ef1
 	github.com/google/uuid v1.3.0
 	google.golang.org/grpc v1.55.0
 	google.golang.org/protobuf v1.30.0

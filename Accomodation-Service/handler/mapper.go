@@ -9,13 +9,14 @@ import (
 
 func mapToPbAccommodation(accommodation *domain.Accommodation) *pb.Accommodation {
 	accPb := &pb.Accommodation{
-		Id:        accommodation.Id.String(),
-		UserId:    accommodation.UserID,
-		Name:      accommodation.Name,
-		City:      accommodation.City,
-		Address:   accommodation.Address,
-		MinGuests: accommodation.MinGuests,
-		MaxGuests: accommodation.MaxGuests,
+		Id:              accommodation.Id.String(),
+		UserId:          accommodation.UserID,
+		Name:            accommodation.Name,
+		City:            accommodation.City,
+		Address:         accommodation.Address,
+		MinGuests:       accommodation.MinGuests,
+		MaxGuests:       accommodation.MaxGuests,
+		AutomaticAccept: accommodation.AutomaticAccept,
 	}
 
 	return accPb

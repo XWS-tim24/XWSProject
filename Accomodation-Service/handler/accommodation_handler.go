@@ -112,3 +112,15 @@ func (handler *AccommodationHandler) TimeSlotAvailableForAccommodation(ctx conte
 	response.Available = timeSlotAvailable
 	return response, nil
 }
+
+func (handler *AccommodationHandler) GetAutomaticAcceptById(ctx context.Context, req *pb.GetByIdRequest) (*pb.GetAutomaticAcceptByIdResponse, error) {
+	id := req.Id
+	log.Printf("AvailableDate with id %s", id)
+	automaticAccept, err := handler.AccommodationService.GetAutomaticAcceptById(id)
+
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAutomaticAcceptByIdResponse{AutomaticAccept: automaticAccept}
+	return response, nil
+}

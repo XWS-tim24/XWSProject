@@ -31,3 +31,11 @@ func (service *AccommodationService) Search(accommodationSearchDTO *dto.Accommod
 	return service.AccommodationRepository.Search(accommodationSearchDTO)
 
 }
+
+func (service *AccommodationService) GetAutomaticAcceptById(id string) (bool, error) {
+	accommodation, err := service.AccommodationRepository.GetById(id)
+	if err != nil {
+		return false, fmt.Errorf(fmt.Sprintf("reservation with id %s not found", id))
+	}
+	return accommodation.AutomaticAccept, nil
+}
