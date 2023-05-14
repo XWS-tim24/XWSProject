@@ -7,12 +7,13 @@ import (
 	"Accomodation-Service/service"
 	"Accomodation-Service/startup/config"
 	"fmt"
+	"log"
+	"net"
+
 	accommodationGw "github.com/XWS-tim24/Common/common/proto/accommodation_service"
 	"google.golang.org/grpc"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
-	"net"
 )
 
 type Server struct {
