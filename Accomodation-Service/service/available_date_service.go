@@ -8,18 +8,19 @@ import (
 )
 
 type AvailableDateService struct {
-	AvailableDateRepository *repo.AvailableDateRepository
-	AccommodationRepository *repo.AccommodationRepository
+	AvailableDateRepository   *repo.AvailableDateRepository
+	AccommodationRepository   *repo.AccommodationRepository
+	ReservationServiceAddress string
 }
 
 func (service *AvailableDateService) Create(availableDate *domain.AvailableDate) error {
 	if availableDate.StartDate.After(availableDate.EndDate) {
 		return fmt.Errorf("start date cannot be after end date")
 	}
-	if !service.AccommodationRepository.ExistsById(availableDate.AccommodationId.String()) {
-		return fmt.Errorf(fmt.Sprintf("Accommodation with id %s not found", availableDate.AccommodationId.String()))
+	if !service.AccommodationRepository.ExistsById(availableDate.AccommodationId) {
+		return fmt.Errorf(fmt.Sprintf("Accommodation with id %s not found", availableDate.AccommodationId))
 	}
-	if !service.AvailableDateRepository.TimeSlotFree(availableDate.AccommodationId.String(), availableDate.StartDate, availableDate.EndDate) {
+	if !service.AvailableDateRepository.TimeSlotFree(availableDate.AccommodationId, availableDate.StartDate, availableDate.EndDate) {
 		return fmt.Errorf("time slot already taken")
 	}
 	err := service.AvailableDateRepository.Create(availableDate)
@@ -42,6 +43,9 @@ func (service *AvailableDateService) Update(id string, availableDateDto *dto.Ava
 	if err != nil {
 		return err
 	}
+	//reservationServiceClient := communication.NewCatalogueClient(service.ReservationServiceAddress)
+	//if !reservationServiceClient.
+
 	availableDate.StartDate = availableDateDto.StartDate
 	availableDate.EndDate = availableDateDto.EndDate
 	availableDate.Price = availableDateDto.Price
@@ -54,4 +58,13 @@ func (service *AvailableDateService) Update(id string, availableDateDto *dto.Ava
 		return err
 	}
 	return nil
+}
+
+func (service *AvailableDateService) TimeSlotAvailableForAccommodation(slotDTO *dto.AvailableTimeSlotDTO) (bool, error) {
+	id := slotDTO.AccommodationId
+	if !service.AccommodationRepository.ExistsById(id) {
+		return false, fmt.Errorf(fmt.Sprintf("Accommodation with id %s not found", id))
+	}
+	timeSlotAvailable := service.AvailableDateRepository.TimeSlotAvailableForAccommodation(id, slotDTO.StartDate, slotDTO.EndDate)
+	return timeSlotAvailable, nil
 }

@@ -54,3 +54,8 @@ func (repo *AvailableDateRepository) TimeSlotFree(accommodationId string, startT
 	result := repo.DatabaseConnection.First(&domain.AvailableDate{}, "accommodation_id = ? and ? < end_date and ? > start_date", accommodationId, startTime, endTime)
 	return result.Error != nil
 }
+
+func (repo *AvailableDateRepository) TimeSlotAvailableForAccommodation(accommodationId string, startTime time.Time, endTime time.Time) bool {
+	result := repo.DatabaseConnection.First(&domain.AvailableDate{}, "accommodation_id = ? and ? >= start_date and ? <= end_date", accommodationId, startTime, endTime)
+	return result.Error == nil
+}
