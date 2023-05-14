@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+option go_package = "github.com/XWS-tim24/Common/common/accommodation_reservation_service";
+package accommodation_reservation_service;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service AccommodationReservationService{
+        rpc GetRequestById(GetByIdRequest) returns(GetByIdResponse) {
+        	option (google.api.http) = {
+			get: "/reservationRequests/{id}"
+		};
+        }
+        rpc GetAllPendingForUser(GetByUserIdRequest) returns(GetAllPendingForUserResponse) {
+        	option (google.api.http) = {
+			get: "/reservationRequests/pending/user/{userId}"
+		};
+        }
+        rpc GetAllPendingForAccomodation(GetAllPendingForAccRequest) returns(GetAllPendingForAccResponse) {
+        	option (google.api.http) = {
+			get: "/reservationRequests/pending/accomodation/{accomodationId}"
+		};
+        }
+
+        rpc GetReservationById(GetByIdRequest) returns(GetReservationByIdResponse) {
+        	option (google.api.http) = {
+			get: "/reservations/{id}"
+		};
+        }
+        rpc GetNumberOfCanceled(GetByUserIdRequest) returns(GetIntResponse) {
+        	option (google.api.http) = {
+			get: "/reservations/canceled/{userId}"
+		};
+        }
+        rpc CreateReservation(CreateReservationRequest) returns(CreateReservationResponse) {
+                option (google.api.http) = {
+                        post: "/reservations"
+                        body: "reservation"
+                };
+        }
+        rpc CreateRequest(CreateReservationRequestRequest) returns(CreateReservationRequestResponse) {
+                option (google.api.http) = {
+                        post: "/reservationRequests"
+                        body: "reservationRequest"
+                };
+        }
+
+        rpc DeleteReservationRequest(GetByIdRequest) returns(ReservationRequestResponse) {
+        	option (google.api.http) = {
+			put: "/reservationRequests/delete/{id}"
+		};
+        }
+
+        rpc AcceptReservationRequest(GetByIdRequest) returns(ReservationRequestResponse) {
+        	option (google.api.http) = {
+			put: "/reservationRequests/accept/{id}"
+		};
+        }
+
+        rpc CancelReservation(GetByIdRequest) returns(ReservationResponse) {
+        	option (google.api.http) = {
+			put: "/reservation/cancel/{id}"
+		};
+        }
+      
+        rpc AlreadyReservedForDate(AlreadyReservedForDateRequest) returns(AlreadyReservedForDateResponse) {
+        	option (google.api.http) = {
+			put: "/reservation/alreadyReserved"
+                        body: "dateAndAccomodationDTO"
+		};
+        }
+
+}
+
+message AlreadyReservedForDateRequest{
+        DateAndAccomodationDTO dateAndAccomodationDTO = 1;
+}
+
+message AlreadyReservedForDateResponse{
+        bool alreadyReserved = 1;
+}
+
+message ReservationRequestResponse{
+        ReservationRequest reservationRequest = 1;
+}
+
+message ReservationResponse{
+        Reservation reservation = 1;
+}
+
+message CreateReservationRequest{
+        Reservation reservation = 1;
+}
+message CreateReservationResponse{
+        Reservation reservation = 1;
+}
+message CreateReservationRequestRequest{
+        ReservationRequest reservationRequest = 1;
+}
+message CreateReservationRequestResponse{
+        ReservationRequest reservationRequest = 1;
+}
+
+message GetByIdRequest {
+        string id = 1;
+}
+
+message GetByIdResponse {
+        ReservationRequest reservationRequest = 1;
+}
+
+message GetReservationByIdResponse {
+        Reservation reservation = 1;
+}
+
+message GetByUserIdRequest {
+        string userId = 1;
+}
+
+message GetAllPendingForUserResponse {
+        repeated ReservationRequest reservationRequest = 1;
+}
+
+message GetAllPendingForAccRequest {
+        string accomodationId = 1;
+}
+
+message GetAllPendingForAccResponse {
+        repeated ReservationRequest reservationRequest = 1;
+}
+
+message GetIntResponse{
+        int32 num = 1;
+}
+
+
+
+message ReservationRequest {
+        string Id = 1;
+        string UserId = 2;
+        google.protobuf.Timestamp StartDate = 3;
+        google.protobuf.Timestamp EndDate = 4;
+        uint32 NumberOfGuests = 5; 
+        enum ReservationRequestStatus{
+                Pending = 0;
+                Accepted = 1;
+                Denied = 2;
+        }
+        ReservationRequestStatus Status = 6;
+        bool deleted = 7;
+}
+
+message Reservation {
+        string Id = 1;
+        string RequestId = 2;
+        enum ReservationStatus{
+                Active = 0;
+                Canceled = 1;
+        }
+        ReservationStatus Status = 3;
+}
+
+message DateAndAccomodationDTO{
+        string accommodationId = 1;
+        google.protobuf.Timestamp startDate = 2;
+        google.protobuf.Timestamp endDate = 3;
+}

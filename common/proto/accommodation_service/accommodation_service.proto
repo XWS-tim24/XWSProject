@@ -1,0 +1,158 @@
+syntax = "proto3";
+
+option go_package = "github.com/XWS-tim24/Common/common/accommodation_service";
+
+package accommodation_service;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service AccommodationService{
+        rpc CreateAcc(CreateAccommodationRequest) returns(CreateAccommodationResponse) {
+        	option (google.api.http) = {
+			post: "/accommodation"
+                        body: "accommodation"
+		};
+        }
+        rpc GetAccommodationById(GetByIdRequest) returns(CreateAccommodationResponse) {
+        	option (google.api.http) = {
+			get: "/accommodation/{id}"
+		};
+        }
+        rpc SearchAccommodations(SearchRequest) returns(SearchResponse) {
+        	option (google.api.http) = {
+			post: "/accommodation/search"
+                        body: "accommodationSearchDTO"
+		};
+        }
+
+        rpc CreateAvailableDate(CreateAvailableDateRequest) returns(CreateAvailableDateResponse) {
+        	option (google.api.http) = {
+			post: "/availableDate"
+                        body: "availableDate"
+		};
+        }
+
+        rpc GetAvailableDateById(GetByIdRequest) returns(CreateAvailableDateResponse) {
+        	option (google.api.http) = {
+			get: "/availableDate/{id}"
+		};
+        }
+
+        rpc UpdateAvailableDate(UpdateAvailableDateRequest) returns(UpdateAvailableDateResponse) {
+        	option (google.api.http) = {
+			put: "/availableDate/{id}"
+                        body: "availableDatedto"
+		};
+        }
+
+        rpc TimeSlotAvailableForAccommodation(TimeSlotAvailableRequest) returns(TimeSlotAvailableResponse) {
+        	option (google.api.http) = {
+			put: "/availableDate/IsTimeSlotAvailable"
+                        body: "availableTimeSlotDTO"
+		};
+        }
+        rpc GetAutomaticAcceptById(GetByIdRequest) returns(GetAutomaticAcceptByIdResponse) {
+        	option (google.api.http) = {
+			get: "/availableDate/getAutomaticAccept/{id}"
+		};
+        }
+        
+      
+}
+message GetAutomaticAcceptByIdResponse{
+        bool automaticAccept = 1;
+}
+
+message TimeSlotAvailableRequest{
+        AvailableTimeSlotDTO availableTimeSlotDTO = 1;
+}
+message TimeSlotAvailableResponse{
+        bool available = 1;
+}
+
+message CreateAccommodationRequest{
+        Accommodation accommodation = 1;
+}
+message CreateAccommodationResponse{
+        Accommodation accommodation = 1;
+}
+message GetByIdRequest{
+        string id = 1;
+}
+
+message SearchRequest{
+        AccommodationSearchDTO accommodationSearchDTO = 1;
+}
+message SearchResponse{
+        repeated Accommodation accommodation = 1;
+}
+
+message CreateAvailableDateRequest{
+        AvailableDate availableDate = 1;
+}
+message CreateAvailableDateResponse{
+        AvailableDate availableDate = 1;
+}
+
+message UpdateAvailableDateRequest{
+        string id = 1;
+        AvailableDateDTO availableDatedto = 2;
+}
+
+message UpdateAvailableDateResponse{
+
+}
+
+
+message Accommodation {
+        string id = 1;
+        string userId = 2;
+        string name = 3;
+        string city = 4;
+        string address = 5;
+        string benefits = 6;
+        uint32 minGuests = 7;
+        uint32 maxGuests = 8; 
+        bool automaticAccept = 9;
+}
+
+message AvailableDate {
+        string id = 1;
+        string accommodation = 2;
+        google.protobuf.Timestamp startDate = 3;
+        google.protobuf.Timestamp endDate = 4;
+        uint32 price = 5;
+        enum PricingType{
+                Per_Guest = 0;
+                Per_Accommodation = 1;
+        }
+        PricingType pricingType = 6;
+}
+message AvailableDateDTO {
+        string id = 1;
+        google.protobuf.Timestamp startDate = 3;
+        google.protobuf.Timestamp endDate = 4;
+        uint32 price = 5;
+        enum PricingType{
+                Per_Guest = 0;
+                Per_Accommodation = 1;
+        }
+        PricingType pricingType = 6;
+}
+
+
+message AccommodationSearchDTO{
+        string city = 1;
+        uint32 guestNum = 2;
+        google.protobuf.Timestamp startDate = 3;
+        google.protobuf.Timestamp endDate = 4;
+}
+
+
+
+message AvailableTimeSlotDTO{
+        string accommodationId = 1;
+        google.protobuf.Timestamp startDate = 2;
+        google.protobuf.Timestamp endDate = 3;
+}
