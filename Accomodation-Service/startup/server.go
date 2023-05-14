@@ -7,12 +7,13 @@ import (
 	"Accomodation-Service/service"
 	"Accomodation-Service/startup/config"
 	"fmt"
+	"log"
+	"net"
+
 	accommodationGw "github.com/XWS-tim24/Common/common/proto/accommodation_service"
 	"google.golang.org/grpc"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
-	"net"
 )
 
 type Server struct {
@@ -26,11 +27,7 @@ func NewServer(config *config.Config) *Server {
 }
 
 func (server *Server) getClient(host, user, password, dbname, port string) (*gorm.DB, error) {
-	host = "localhost"
-	user = "postgres"
-	password = "loki123"
-	dbname = "AccommodationServiceDB"
-	port = "5432"
+
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbname, port)
 	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
 }
@@ -63,8 +60,7 @@ func (server *Server) Start() {
 
 	availableDateRepository := &repo.AvailableDateRepository{DatabaseConnection: postgresClient}
 	accommodationRepository := &repo.AccommodationRepository{DatabaseConnection: postgresClient}
-	server.config.ReservationServiceHost = "localhost"
-	server.config.ReservationServicePort = "8080"
+
 	reservationServiceAddress := fmt.Sprintf("%s:%s", server.config.ReservationServiceHost, server.config.ReservationServicePort)
 	availableDateService := &service.AvailableDateService{AvailableDateRepository: availableDateRepository, AccommodationRepository: accommodationRepository, ReservationServiceAddress: reservationServiceAddress}
 	accommodationService := &service.AccommodationService{AccommodationRepository: accommodationRepository}
@@ -75,7 +71,7 @@ func (server *Server) Start() {
 }
 
 func (server *Server) startGrpcServer(accommodationHandler *handler.AccommodationHandler) {
-	server.config.Port = "8080"
+
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", server.config.Port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
