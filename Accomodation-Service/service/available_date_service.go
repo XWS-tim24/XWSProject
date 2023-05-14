@@ -52,7 +52,7 @@ func (service *AvailableDateService) Update(id string, availableDateDto *dto.Ava
 
 	availableDate.PricingType = availableDateDto.PricingType
 
-	service.AvailableDateRepository.Update(id, availableDate)
+	err = service.AvailableDateRepository.Update(id, availableDate)
 	if err != nil {
 		print("error during deleting reservation request logicaly, request id %s", id)
 		return err

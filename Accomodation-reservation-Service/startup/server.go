@@ -60,9 +60,9 @@ func (server *Server) Start() {
 
 	resRepo := &repo.ReservationRepository{DatabaseConnection: database}
 	reqRepo := &repo.ReservationRequestRepository{DatabaseConnection: database}
-
-	resService := &service.ReservationService{ReservationRepo: resRepo, ReservationRequestRepo: reqRepo}
-	reqService := &service.ReservationRequestService{ReservationRequestRepo: reqRepo, ReservationService: resService}
+	accommodationServiceAddress := fmt.Sprintf("%s:%s", server.config.AccommodationServiceHost, server.config.AccommodationServicePort)
+	resService := &service.ReservationService{ReservationRepo: resRepo, ReservationRequestRepo: reqRepo, AccommodationServiceAddres: accommodationServiceAddress}
+	reqService := &service.ReservationRequestService{ReservationRequestRepo: reqRepo, ReservationService: resService, AccommodationServiceAddres: accommodationServiceAddress}
 
 	resHandler := &handler.ReservationHandler{ReservationService: resService, ReservationRequestService: reqService}
 

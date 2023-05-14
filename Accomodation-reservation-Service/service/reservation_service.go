@@ -8,8 +8,9 @@ import (
 )
 
 type ReservationService struct {
-	ReservationRepo        *repo.ReservationRepository
-	ReservationRequestRepo *repo.ReservationRequestRepository
+	ReservationRepo            *repo.ReservationRepository
+	ReservationRequestRepo     *repo.ReservationRequestRepository
+	AccommodationServiceAddres string
 }
 
 func (service *ReservationService) GetById(id string) (*domain.Reservation, error) {

@@ -1,15 +1,20 @@
 package service
 
 import (
+	"Accomodation-reservation-Service/communication"
 	"Accomodation-reservation-Service/domain"
 	"Accomodation-reservation-Service/repo"
+	"context"
 	"fmt"
+	pb "github.com/XWS-tim24/Common/common/proto/accommodation_service"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
 
 type ReservationRequestService struct { //Accept prihvata rezervaciju, updatuje u bazi i poziva createReservation
-	ReservationRequestRepo *repo.ReservationRequestRepository
-	ReservationService     *ReservationService
+	ReservationRequestRepo     *repo.ReservationRequestRepository
+	ReservationService         *ReservationService
+	AccommodationServiceAddres string
 }
 
 func (service *ReservationRequestService) GetById(id string) (*domain.ReservationRequest, error) {
@@ -36,12 +41,23 @@ func (service *ReservationRequestService) Create(reservationRequest *domain.Rese
 	if service.alreadyReservedForDate(reservationRequest) { //ili 2
 		return service.createDenied(reservationRequest)
 	}
+	accommodationClient := communication.NewAccommodationClient(service.AccommodationServiceAddres)
+	request := &pb.TimeSlotAvailableRequest{}
+	request.AvailableTimeSlotDTO = &pb.AvailableTimeSlotDTO{AccommodationId: reservationRequest.AccomodationId, StartDate: timestamppb.New(reservationRequest.StartDate), EndDate: timestamppb.New(reservationRequest.EndDate)}
+	response, err := accommodationClient.TimeSlotAvailableForAccommodation(context.TODO(), request)
+	if err != nil {
+		return err
+	}
+	if response.Available == false {
+		return fmt.Errorf("accommodation is not available in time slot")
+
+	}
 	//automatska_potvrda := true //3.
 	//if automatska_potvrda {
 	//	reservationRequest.Status = domain.Accepted
 	//service.MakeReservation(reservationRequest)
 	//}
-	err := service.ReservationRequestRepo.Create(reservationRequest)
+	err = service.ReservationRequestRepo.Create(reservationRequest)
 	if err != nil {
 		return err
 	}
