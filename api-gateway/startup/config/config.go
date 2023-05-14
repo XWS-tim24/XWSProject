@@ -12,6 +12,11 @@ type Config struct {
 
 func NewConfig() *Config {
 	return &Config{
+		/*	Port:                         "8000",
+			AccommodationReservationHost: "localhost",
+			AccommodationReservationPort: "8080",
+			AccommodationHost:            os.Getenv("ACCOMMODATION_SERVICE_HOST"),
+			AccommodationPort:            os.Getenv("ACCOMMODATION_SERVICE_PORT"),*/
 		Port:                         os.Getenv("GATEWAY_PORT"),
 		AccommodationHost:            os.Getenv("ACCOMMODATION_SERVICE_HOST"),
 		AccommodationPort:            os.Getenv("ACCOMMODATION_SERVICE_PORT"),

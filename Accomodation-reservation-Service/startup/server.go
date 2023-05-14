@@ -29,6 +29,7 @@ func NewServer(config *config.Config) *Server {
 func (server *Server) getClient(host, user, password, dbname, port string) (*gorm.DB, error) {
 	//host = "localhost"
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbname, port)
+	print(dsn)
 	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
 }
 

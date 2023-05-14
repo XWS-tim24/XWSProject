@@ -12,13 +12,13 @@ type AccommodationRepository struct {
 	DatabaseConnection *gorm.DB
 }
 
-func (repo *AccommodationRepository) Create(accommodation *domain.Accommodation) error {
+func (repo *AccommodationRepository) Create(accommodation *domain.Accommodation) (*domain.Accommodation, error) {
 	dbResult := repo.DatabaseConnection.Create(accommodation)
 	if dbResult.Error != nil {
-		return dbResult.Error
+		return nil, dbResult.Error
 	}
 	println("Rows affected: ", dbResult.RowsAffected)
-	return nil
+	return accommodation, nil
 }
 
 func (repo *AccommodationRepository) GetById(id string) (*domain.Accommodation, error) {

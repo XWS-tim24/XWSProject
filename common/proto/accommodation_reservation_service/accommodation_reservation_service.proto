@@ -139,16 +139,17 @@ message GetIntResponse{
 message ReservationRequest {
         string Id = 1;
         string UserId = 2;
-        google.protobuf.Timestamp StartDate = 3;
-        google.protobuf.Timestamp EndDate = 4;
-        uint32 NumberOfGuests = 5; 
+        string AccommodationId = 3;
+        google.protobuf.Timestamp StartDate = 4;
+        google.protobuf.Timestamp EndDate = 5;
+        uint32 NumberOfGuests = 6;
         enum ReservationRequestStatus{
                 Pending = 0;
                 Accepted = 1;
                 Denied = 2;
         }
-        ReservationRequestStatus Status = 6;
-        bool deleted = 7;
+        ReservationRequestStatus Status = 7;
+        bool deleted = 8;
 }
 
 message Reservation {

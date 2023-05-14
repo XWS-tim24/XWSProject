@@ -18,13 +18,14 @@ func mapToReservationPb(reservation *domain.Reservation) *pb.Reservation {
 
 func mapToReservationRequestPb(reservationRequest *domain.ReservationRequest) *pb.ReservationRequest {
 	reservationRequestPb := &pb.ReservationRequest{
-		Id:             reservationRequest.Id.String(),
-		UserId:         reservationRequest.UserId,
-		StartDate:      timestamppb.New(reservationRequest.StartDate),
-		EndDate:        timestamppb.New(reservationRequest.EndDate),
-		NumberOfGuests: uint32(reservationRequest.NumberOfGuests),
-		Status:         mapToReservationRequestStatusPb(reservationRequest.Status),
-		Deleted:        reservationRequest.Deleted,
+		Id:              reservationRequest.Id.String(),
+		AccommodationId: reservationRequest.AccomodationId,
+		UserId:          reservationRequest.UserId,
+		StartDate:       timestamppb.New(reservationRequest.StartDate),
+		EndDate:         timestamppb.New(reservationRequest.EndDate),
+		NumberOfGuests:  uint32(reservationRequest.NumberOfGuests),
+		Status:          mapToReservationRequestStatusPb(reservationRequest.Status),
+		Deleted:         reservationRequest.Deleted,
 	}
 	return reservationRequestPb
 }
@@ -40,6 +41,7 @@ func mapToReservation(reservationPb *pb.Reservation) *domain.Reservation {
 func mapToReservationRequest(reservationRequestPb *pb.ReservationRequest) *domain.ReservationRequest {
 	reservationRequest := &domain.ReservationRequest{
 		UserId:         reservationRequestPb.UserId,
+		AccomodationId: reservationRequestPb.AccommodationId,
 		StartDate:      reservationRequestPb.StartDate.AsTime(),
 		EndDate:        reservationRequestPb.EndDate.AsTime(),
 		NumberOfGuests: uint64(reservationRequestPb.NumberOfGuests),

@@ -39,24 +39,40 @@ func (service *ReservationRequestService) Create(reservationRequest *domain.Rese
 	reservationRequest.Status = domain.Pending
 	reservationRequest.Deleted = false
 	if service.AlreadyReservedForDate(reservationRequest.AccomodationId, reservationRequest.StartDate, reservationRequest.EndDate) { //ili 2
-		return service.createDenied(reservationRequest)
+		return fmt.Errorf("accommodation is already reserved for chosen date") //service.createDenied(reservationRequest)
 	}
 	accommodationClient := communication.NewAccommodationClient(service.AccommodationServiceAddres)
+	fmt.Println("checking availability for :id", reservationRequest.AccomodationId)
 	request := &pb.TimeSlotAvailableRequest{}
 	request.AvailableTimeSlotDTO = &pb.AvailableTimeSlotDTO{AccommodationId: reservationRequest.AccomodationId, StartDate: timestamppb.New(reservationRequest.StartDate), EndDate: timestamppb.New(reservationRequest.EndDate)}
 	response, err := accommodationClient.TimeSlotAvailableForAccommodation(context.TODO(), request)
 	if err != nil {
 		return err
 	}
-	if response.Available == false {
+	if !response.Available {
 		return fmt.Errorf("accommodation is not available in time slot")
-
 	}
-	//automatska_potvrda := true //3.
-	//if automatska_potvrda {
-	//	reservationRequest.Status = domain.Accepted
-	//service.MakeReservation(reservationRequest)
-	//}
+
+	fmt.Println("checking if automatic confirmation is chosen for accommodation id :", reservationRequest.AccomodationId)
+	request1 := &pb.GetByIdRequest{Id: reservationRequest.AccomodationId}
+	response1, err1 := accommodationClient.GetAutomaticAcceptById(context.TODO(), request1)
+	if err1 != nil {
+		return err1
+	}
+	if response1.AutomaticAccept {
+		reservationRequest.Status = domain.Accepted
+		err := service.ReservationRequestRepo.Create(reservationRequest)
+		if err != nil {
+			return err
+		}
+		fmt.Println("created accepted request with id :", reservationRequest.Id)
+		err = service.createReservation(reservationRequest)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
 	err = service.ReservationRequestRepo.Create(reservationRequest)
 	if err != nil {
 		return err
