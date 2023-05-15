@@ -1,5 +1,3 @@
-github.com/XWS-tim24/Common/common v0.0.0-20230515000857-6fe8d9d92149 h1:Uu6sBMtU8P2CXZy+pvbyta+ViYVHqC5dmo5/pFwDA2o=
-github.com/XWS-tim24/Common/common v0.0.0-20230515000857-6fe8d9d92149/go.mod h1:E+b61UtmbAqj4jBpQkZcXczoImnRJIfN0wffpLdnvCw=
 github.com/XWS-tim24/Common/common v0.0.0-20230515005301-df9dc253cac0 h1:U31mAWtClpOgGE5a/spSGyFL6+O5rPYKEnhrx8qe9+c=
 github.com/XWS-tim24/Common/common v0.0.0-20230515005301-df9dc253cac0/go.mod h1:E+b61UtmbAqj4jBpQkZcXczoImnRJIfN0wffpLdnvCw=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
