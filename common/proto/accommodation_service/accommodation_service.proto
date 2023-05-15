@@ -57,8 +57,32 @@ service AccommodationService{
 			get: "/availableDate/getAutomaticAccept/{id}"
 		};
         }
-        
-      
+
+
+  rpc GetAllAccommodation(GetAllRequest) returns(GetAllAccommodationResponse) {
+    option (google.api.http) = {
+      get: "/accommodation"
+    };
+  }
+
+  rpc GetAllAvailableDates(GetAllRequest) returns(GetAllAvailableDatesResponse) {
+    option (google.api.http) = {
+      get: "/availableDate"
+    };
+  }
+
+}
+
+message GetAllRequest {
+}
+
+message GetAllAccommodationResponse {
+  repeated Accommodation accommodations = 1;
+}
+
+
+message GetAllAvailableDatesResponse {
+  repeated AvailableDate availableDates = 1;
 }
 message GetAutomaticAcceptByIdResponse{
         bool automaticAccept = 1;

@@ -127,3 +127,33 @@ func (handler *AccommodationHandler) GetAutomaticAcceptById(ctx context.Context,
 	response := &pb.GetAutomaticAcceptByIdResponse{AutomaticAccept: automaticAccept}
 	return response, nil
 }
+
+func (handler *AccommodationHandler) GetAllAccommodation(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllAccommodationResponse, error) {
+	accomodations, err := handler.AccommodationService.GetAll()
+	if err != nil || *accomodations == nil {
+		return nil, err
+	}
+	response := &pb.GetAllAccommodationResponse{
+		Accommodations: []*pb.Accommodation{},
+	}
+	for _, reservation := range *accomodations {
+		current := mapToPbAccommodation(&reservation)
+		response.Accommodations = append(response.Accommodations, current)
+	}
+	return response, nil
+}
+
+func (handler *AccommodationHandler) GetAllAvailableDates(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllAvailableDatesResponse, error) {
+	dates, err := handler.AvailableDateService.GetAll()
+	if err != nil || *dates == nil {
+		return nil, err
+	}
+	response := &pb.GetAllAvailableDatesResponse{
+		AvailableDates: []*pb.AvailableDate{},
+	}
+	for _, reservationRequest := range *dates {
+		current := mapToAvailableDatePb(&reservationRequest)
+		response.AvailableDates = append(response.AvailableDates, current)
+	}
+	return response, nil
+}

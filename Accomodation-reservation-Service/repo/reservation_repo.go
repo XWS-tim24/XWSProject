@@ -11,6 +11,15 @@ type ReservationRepository struct {
 	DatabaseConnection *gorm.DB
 }
 
+func (repo *ReservationRepository) GetAll() (*[]domain.Reservation, error) {
+	var reservations []domain.Reservation
+	result := repo.DatabaseConnection.Find(&reservations)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &reservations, nil
+}
+
 func (repo *ReservationRepository) GetById(id string) (domain.Reservation, error) {
 	reservation := domain.Reservation{}
 	dbResult := repo.DatabaseConnection.First(&reservation, "id = ?", id)

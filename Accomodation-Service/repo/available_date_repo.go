@@ -21,6 +21,15 @@ func (repo *AvailableDateRepository) Create(availableDate *domain.AvailableDate)
 	return availableDate, nil
 }
 
+func (repo *AvailableDateRepository) GetAll() (*[]domain.AvailableDate, error) {
+	var dates []domain.AvailableDate
+	result := repo.DatabaseConnection.Find(&dates)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &dates, nil
+}
+
 func (repo *AvailableDateRepository) GetById(id string) (*domain.AvailableDate, error) {
 	availableDate := &domain.AvailableDate{}
 	dbResult := repo.DatabaseConnection.First(availableDate, "id = ?", id)

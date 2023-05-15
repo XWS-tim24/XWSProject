@@ -18,7 +18,9 @@ func (service *AccommodationService) Create(accommodation *domain.Accommodation)
 	}
 	return acc, nil
 }
-
+func (service *AccommodationService) GetAll() (*[]domain.Accommodation, error) {
+	return service.AccommodationRepository.GetAll()
+}
 func (service *AccommodationService) GetById(id string) (*domain.Accommodation, error) {
 	accommodation, err := service.AccommodationRepository.GetById(id)
 	if err != nil {

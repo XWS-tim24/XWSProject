@@ -3,7 +3,7 @@ module api-gateway
 go 1.20
 
 require (
-	github.com/XWS-tim24/Common/common v0.0.0-20230514181629-2845e349cab6
+	github.com/XWS-tim24/Common/common v0.0.0-20230515005301-df9dc253cac0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	google.golang.org/grpc v1.55.0
 )

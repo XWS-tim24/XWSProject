@@ -30,6 +30,8 @@ type AccommodationServiceClient interface {
 	UpdateAvailableDate(ctx context.Context, in *UpdateAvailableDateRequest, opts ...grpc.CallOption) (*UpdateAvailableDateResponse, error)
 	TimeSlotAvailableForAccommodation(ctx context.Context, in *TimeSlotAvailableRequest, opts ...grpc.CallOption) (*TimeSlotAvailableResponse, error)
 	GetAutomaticAcceptById(ctx context.Context, in *GetByIdRequest, opts ...grpc.CallOption) (*GetAutomaticAcceptByIdResponse, error)
+	GetAllAccommodation(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*GetAllAccommodationResponse, error)
+	GetAllAvailableDates(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*GetAllAvailableDatesResponse, error)
 }
 
 type accommodationServiceClient struct {
@@ -112,6 +114,24 @@ func (c *accommodationServiceClient) GetAutomaticAcceptById(ctx context.Context,
 	return out, nil
 }
 
+func (c *accommodationServiceClient) GetAllAccommodation(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*GetAllAccommodationResponse, error) {
+	out := new(GetAllAccommodationResponse)
+	err := c.cc.Invoke(ctx, "/accommodation_service.AccommodationService/GetAllAccommodation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accommodationServiceClient) GetAllAvailableDates(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*GetAllAvailableDatesResponse, error) {
+	out := new(GetAllAvailableDatesResponse)
+	err := c.cc.Invoke(ctx, "/accommodation_service.AccommodationService/GetAllAvailableDates", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccommodationServiceServer is the server API for AccommodationService service.
 // All implementations must embed UnimplementedAccommodationServiceServer
 // for forward compatibility
@@ -124,6 +144,8 @@ type AccommodationServiceServer interface {
 	UpdateAvailableDate(context.Context, *UpdateAvailableDateRequest) (*UpdateAvailableDateResponse, error)
 	TimeSlotAvailableForAccommodation(context.Context, *TimeSlotAvailableRequest) (*TimeSlotAvailableResponse, error)
 	GetAutomaticAcceptById(context.Context, *GetByIdRequest) (*GetAutomaticAcceptByIdResponse, error)
+	GetAllAccommodation(context.Context, *GetAllRequest) (*GetAllAccommodationResponse, error)
+	GetAllAvailableDates(context.Context, *GetAllRequest) (*GetAllAvailableDatesResponse, error)
 	mustEmbedUnimplementedAccommodationServiceServer()
 }
 
@@ -154,6 +176,12 @@ func (UnimplementedAccommodationServiceServer) TimeSlotAvailableForAccommodation
 }
 func (UnimplementedAccommodationServiceServer) GetAutomaticAcceptById(context.Context, *GetByIdRequest) (*GetAutomaticAcceptByIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAutomaticAcceptById not implemented")
+}
+func (UnimplementedAccommodationServiceServer) GetAllAccommodation(context.Context, *GetAllRequest) (*GetAllAccommodationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllAccommodation not implemented")
+}
+func (UnimplementedAccommodationServiceServer) GetAllAvailableDates(context.Context, *GetAllRequest) (*GetAllAvailableDatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllAvailableDates not implemented")
 }
 func (UnimplementedAccommodationServiceServer) mustEmbedUnimplementedAccommodationServiceServer() {}
 
@@ -312,6 +340,42 @@ func _AccommodationService_GetAutomaticAcceptById_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccommodationService_GetAllAccommodation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccommodationServiceServer).GetAllAccommodation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accommodation_service.AccommodationService/GetAllAccommodation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccommodationServiceServer).GetAllAccommodation(ctx, req.(*GetAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AccommodationService_GetAllAvailableDates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccommodationServiceServer).GetAllAvailableDates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accommodation_service.AccommodationService/GetAllAvailableDates",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccommodationServiceServer).GetAllAvailableDates(ctx, req.(*GetAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AccommodationService_ServiceDesc is the grpc.ServiceDesc for AccommodationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -350,6 +414,14 @@ var AccommodationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAutomaticAcceptById",
 			Handler:    _AccommodationService_GetAutomaticAcceptById_Handler,
+		},
+		{
+			MethodName: "GetAllAccommodation",
+			Handler:    _AccommodationService_GetAllAccommodation_Handler,
+		},
+		{
+			MethodName: "GetAllAvailableDates",
+			Handler:    _AccommodationService_GetAllAvailableDates_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

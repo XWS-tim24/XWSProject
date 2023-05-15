@@ -17,6 +17,10 @@ type ReservationRequestService struct { //Accept prihvata rezervaciju, updatuje 
 	AccommodationServiceAddres string
 }
 
+func (service *ReservationRequestService) GetAll() (*[]domain.ReservationRequest, error) {
+	return service.ReservationRequestRepo.GetAll()
+}
+
 func (service *ReservationRequestService) GetById(id string) (*domain.ReservationRequest, error) {
 	reservationRequest, err := service.ReservationRequestRepo.GetById(id)
 	if err != nil {
@@ -88,6 +92,11 @@ func (service *ReservationRequestService) Accept(id string) error {
 	if reservationRequest.Status != domain.Pending {
 		return fmt.Errorf(fmt.Sprintf("only pending requests are allowed to accept. request id %s", id))
 	}
+
+	if reservationRequest.Deleted {
+		return fmt.Errorf(fmt.Sprintf(" request is deleted. request id %s", id))
+	}
+
 	reservationRequest.Status = domain.Accepted
 	err := service.ReservationRequestRepo.AcceptOrDeny(reservationRequest)
 	if err != nil {
@@ -109,6 +118,9 @@ func (service *ReservationRequestService) Accept(id string) error {
 
 func (service *ReservationRequestService) Deny(id string) error {
 	reservationRequest, _ := service.GetById(id)
+	if reservationRequest.Deleted {
+		return fmt.Errorf(fmt.Sprintf(" request is deleted. request id %s", id))
+	}
 	reservationRequest.Status = domain.Denied
 	err := service.ReservationRequestRepo.AcceptOrDeny(reservationRequest)
 	if err != nil {

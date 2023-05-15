@@ -13,6 +13,10 @@ type ReservationService struct {
 	AccommodationServiceAddres string
 }
 
+func (service *ReservationService) GetAll() (*[]domain.Reservation, error) {
+	return service.ReservationRepo.GetAll()
+}
+
 func (service *ReservationService) GetById(id string) (*domain.Reservation, error) {
 	reservation, err := service.ReservationRepo.GetById(id)
 	if err != nil {

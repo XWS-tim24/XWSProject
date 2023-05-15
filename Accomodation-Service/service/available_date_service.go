@@ -42,6 +42,10 @@ func (service *AvailableDateService) GetById(id string) (*domain.AvailableDate, 
 	return availableDate, nil
 }
 
+func (service *AvailableDateService) GetAll() (*[]domain.AvailableDate, error) {
+	return service.AvailableDateRepository.GetAll()
+}
+
 func (service *AvailableDateService) Update(id string, availableDateDto *dto.AvailableDateDTO) error {
 	availableDate, err := service.GetById(id)
 	if err != nil {
@@ -50,7 +54,7 @@ func (service *AvailableDateService) Update(id string, availableDateDto *dto.Ava
 	reservationServiceClient := communication.NewReservationClient(service.ReservationServiceAddress)
 
 	req := &pb.AlreadyReservedForDateRequest{}
-	req.DateAndAccomodationDTO = &pb.DateAndAccomodationDTO{AccommodationId: availableDate.AccommodationId, StartDate: timestamppb.New(availableDateDto.StartDate), EndDate: timestamppb.New(availableDateDto.EndDate)}
+	req.DateAndAccomodationDTO = &pb.DateAndAccomodationDTO{AccommodationId: availableDate.AccommodationId, StartDate: timestamppb.New(availableDate.StartDate), EndDate: timestamppb.New(availableDate.EndDate)}
 	response, err1 := reservationServiceClient.AlreadyReservedForDate(context.TODO(), req)
 	if err1 != nil {
 		return err1

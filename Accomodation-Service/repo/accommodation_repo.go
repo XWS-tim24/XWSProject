@@ -21,6 +21,15 @@ func (repo *AccommodationRepository) Create(accommodation *domain.Accommodation)
 	return accommodation, nil
 }
 
+func (repo *AccommodationRepository) GetAll() (*[]domain.Accommodation, error) {
+	var accommodations []domain.Accommodation
+	result := repo.DatabaseConnection.Find(&accommodations)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &accommodations, nil
+}
+
 func (repo *AccommodationRepository) GetById(id string) (*domain.Accommodation, error) {
 	accommodation := &domain.Accommodation{}
 	dbResult := repo.DatabaseConnection.First(accommodation, "id = ?", id)

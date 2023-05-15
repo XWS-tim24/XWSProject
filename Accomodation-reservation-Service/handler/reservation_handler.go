@@ -115,6 +115,7 @@ func (handler *ReservationHandler) DeleteReservationRequest(ctx context.Context,
 		return nil, err
 	}
 	reservationRequest, err2 := handler.ReservationRequestService.GetById(id)
+	log.Printf("Get request with id %s", id)
 	if err2 != nil {
 		return nil, err
 	}
@@ -143,10 +144,29 @@ func (handler *ReservationHandler) AcceptReservationRequest(ctx context.Context,
 	return response, nil
 }
 
-func (handler *ReservationHandler) CancelReservation(ctx context.Context, request *pb.GetByIdRequest) (*pb.ReservationResponse, error) {
+func (handler *ReservationHandler) DenyReservationRequest(ctx context.Context, request *pb.GetByIdRequest) (*pb.ReservationRequestResponse, error) {
 	id := request.Id
 	log.Printf("Reservation request with id %s", id)
-	err := handler.ReservationService.Cancel(id, "user2")
+	err := handler.ReservationRequestService.Deny(id)
+	if err != nil {
+		return nil, err
+	}
+	reservationRequest, err2 := handler.ReservationRequestService.GetById(id)
+	if err2 != nil {
+		return nil, err
+	}
+	ReservationRequestPb := mapToReservationRequestPb(reservationRequest)
+	response := &pb.ReservationRequestResponse{
+		ReservationRequest: ReservationRequestPb,
+	}
+	return response, nil
+}
+
+func (handler *ReservationHandler) CancelReservation(ctx context.Context, request *pb.GetByIdAndUserIdRequest) (*pb.ReservationResponse, error) {
+	id := request.Id
+	userId := request.UserId
+	log.Printf("Canceling request with id %s and userId %s ", id, userId)
+	err := handler.ReservationService.Cancel(id, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -167,6 +187,36 @@ func (handler *ReservationHandler) AlreadyReservedForDate(ctx context.Context, r
 
 	response := &pb.AlreadyReservedForDateResponse{
 		AlreadyReserved: alreadyReserved,
+	}
+	return response, nil
+}
+
+func (handler *ReservationHandler) GetAllReservations(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllReservationsResponse, error) {
+	reservations, err := handler.ReservationService.GetAll()
+	if err != nil || *reservations == nil {
+		return nil, err
+	}
+	response := &pb.GetAllReservationsResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range *reservations {
+		current := mapToReservationPb(&reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
+
+func (handler *ReservationHandler) GetAllRequests(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllRequestsResponse, error) {
+	reservationRequests, err := handler.ReservationRequestService.GetAll()
+	if err != nil || *reservationRequests == nil {
+		return nil, err
+	}
+	response := &pb.GetAllRequestsResponse{
+		ReservationRequests: []*pb.ReservationRequest{},
+	}
+	for _, reservationRequest := range *reservationRequests {
+		current := mapToReservationRequestPb(&reservationRequest)
+		response.ReservationRequests = append(response.ReservationRequests, current)
 	}
 	return response, nil
 }
