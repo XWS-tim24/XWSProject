@@ -24,12 +24,13 @@ func mapToPbAccommodation(accommodation *domain.Accommodation) *pb.Accommodation
 
 func mapToAccommodation(accPb *pb.Accommodation) *domain.Accommodation {
 	acc := &domain.Accommodation{
-		UserID:    accPb.UserId,
-		Name:      accPb.Name,
-		City:      accPb.City,
-		Address:   accPb.Address,
-		MinGuests: accPb.MinGuests,
-		MaxGuests: accPb.MaxGuests,
+		UserID:          accPb.UserId,
+		Name:            accPb.Name,
+		City:            accPb.City,
+		Address:         accPb.Address,
+		MinGuests:       accPb.MinGuests,
+		MaxGuests:       accPb.MaxGuests,
+		AutomaticAccept: accPb.AutomaticAccept,
 	}
 
 	return acc

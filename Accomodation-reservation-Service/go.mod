@@ -3,7 +3,7 @@ module Accomodation-reservation-Service
 go 1.20
 
 require (
-	github.com/XWS-tim24/Common/common v0.0.0-20230514164054-1de09b5b23ed
+	github.com/XWS-tim24/Common/common v0.0.0-20230515005301-df9dc253cac0
 	github.com/google/uuid v1.3.0
 	google.golang.org/grpc v1.55.0
 	google.golang.org/protobuf v1.30.0

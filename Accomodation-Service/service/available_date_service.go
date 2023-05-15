@@ -1,10 +1,14 @@
 package service
 
 import (
+	"Accomodation-Service/communication"
 	"Accomodation-Service/domain"
 	"Accomodation-Service/dto"
 	"Accomodation-Service/repo"
+	"context"
 	"fmt"
+	pb "github.com/XWS-tim24/Common/common/proto/accommodation_reservation_service"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type AvailableDateService struct {
@@ -13,21 +17,21 @@ type AvailableDateService struct {
 	ReservationServiceAddress string
 }
 
-func (service *AvailableDateService) Create(availableDate *domain.AvailableDate) error {
+func (service *AvailableDateService) Create(availableDate *domain.AvailableDate) (*domain.AvailableDate, error) {
 	if availableDate.StartDate.After(availableDate.EndDate) {
-		return fmt.Errorf("start date cannot be after end date")
+		return nil, fmt.Errorf("start date cannot be after end date")
 	}
 	if !service.AccommodationRepository.ExistsById(availableDate.AccommodationId) {
-		return fmt.Errorf(fmt.Sprintf("Accommodation with id %s not found", availableDate.AccommodationId))
+		return nil, fmt.Errorf(fmt.Sprintf("Accommodation with id %s not found", availableDate.AccommodationId))
 	}
 	if !service.AvailableDateRepository.TimeSlotFree(availableDate.AccommodationId, availableDate.StartDate, availableDate.EndDate) {
-		return fmt.Errorf("time slot already taken")
+		return nil, fmt.Errorf("time slot already taken")
 	}
-	err := service.AvailableDateRepository.Create(availableDate)
+	resp, err := service.AvailableDateRepository.Create(availableDate)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return resp, nil
 }
 
 func (service *AvailableDateService) GetById(id string) (*domain.AvailableDate, error) {
@@ -38,14 +42,26 @@ func (service *AvailableDateService) GetById(id string) (*domain.AvailableDate, 
 	return availableDate, nil
 }
 
+func (service *AvailableDateService) GetAll() (*[]domain.AvailableDate, error) {
+	return service.AvailableDateRepository.GetAll()
+}
+
 func (service *AvailableDateService) Update(id string, availableDateDto *dto.AvailableDateDTO) error {
 	availableDate, err := service.GetById(id)
 	if err != nil {
 		return err
 	}
-	//reservationServiceClient := communication.NewCatalogueClient(service.ReservationServiceAddress)
-	//if !reservationServiceClient.
+	reservationServiceClient := communication.NewReservationClient(service.ReservationServiceAddress)
 
+	req := &pb.AlreadyReservedForDateRequest{}
+	req.DateAndAccomodationDTO = &pb.DateAndAccomodationDTO{AccommodationId: availableDate.AccommodationId, StartDate: timestamppb.New(availableDate.StartDate), EndDate: timestamppb.New(availableDate.EndDate)}
+	response, err1 := reservationServiceClient.AlreadyReservedForDate(context.TODO(), req)
+	if err1 != nil {
+		return err1
+	}
+	if response.AlreadyReserved {
+		return fmt.Errorf("cannot update you have reservation")
+	}
 	availableDate.StartDate = availableDateDto.StartDate
 	availableDate.EndDate = availableDateDto.EndDate
 	availableDate.Price = availableDateDto.Price

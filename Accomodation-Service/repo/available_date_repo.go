@@ -12,13 +12,22 @@ type AvailableDateRepository struct {
 	DatabaseConnection *gorm.DB
 }
 
-func (repo *AvailableDateRepository) Create(availableDate *domain.AvailableDate) error {
+func (repo *AvailableDateRepository) Create(availableDate *domain.AvailableDate) (*domain.AvailableDate, error) {
 	dbResult := repo.DatabaseConnection.Create(availableDate)
 	if dbResult.Error != nil {
-		return dbResult.Error
+		return nil, dbResult.Error
 	}
 	println("Rows affected: ", dbResult.RowsAffected)
-	return nil
+	return availableDate, nil
+}
+
+func (repo *AvailableDateRepository) GetAll() (*[]domain.AvailableDate, error) {
+	var dates []domain.AvailableDate
+	result := repo.DatabaseConnection.Find(&dates)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &dates, nil
 }
 
 func (repo *AvailableDateRepository) GetById(id string) (*domain.AvailableDate, error) {

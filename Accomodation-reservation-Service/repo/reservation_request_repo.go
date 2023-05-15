@@ -21,6 +21,15 @@ func (repo *ReservationRequestRepository) GetById(id string) (domain.Reservation
 	return reservationRequest, nil
 }
 
+func (repo *ReservationRequestRepository) GetAll() (*[]domain.ReservationRequest, error) {
+	var reservationRequests []domain.ReservationRequest
+	result := repo.DatabaseConnection.Find(&reservationRequests)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &reservationRequests, nil
+}
+
 func (repo *ReservationRequestRepository) Create(reservationRequest *domain.ReservationRequest) error {
 	dbResult := repo.DatabaseConnection.Create(reservationRequest)
 	if dbResult.Error != nil {

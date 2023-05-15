@@ -11,14 +11,16 @@ type AccommodationService struct {
 	AccommodationRepository *repo.AccommodationRepository
 }
 
-func (service *AccommodationService) Create(accommodation *domain.Accommodation) error {
-	err := service.AccommodationRepository.Create(accommodation)
+func (service *AccommodationService) Create(accommodation *domain.Accommodation) (*domain.Accommodation, error) {
+	acc, err := service.AccommodationRepository.Create(accommodation)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return acc, nil
 }
-
+func (service *AccommodationService) GetAll() (*[]domain.Accommodation, error) {
+	return service.AccommodationRepository.GetAll()
+}
 func (service *AccommodationService) GetById(id string) (*domain.Accommodation, error) {
 	accommodation, err := service.AccommodationRepository.GetById(id)
 	if err != nil {
