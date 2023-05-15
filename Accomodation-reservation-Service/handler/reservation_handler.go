@@ -68,6 +68,7 @@ func (handler *ReservationHandler) GetRequestById(ctx context.Context, request *
 
 func (handler *ReservationHandler) CreateRequest(ctx context.Context, request *pb.CreateReservationRequestRequest) (*pb.CreateReservationRequestResponse, error) {
 	reservationRequest := mapToReservationRequest(request.ReservationRequest)
+	println("accomodation id in handler %s", reservationRequest.AccomodationId)
 	err := handler.ReservationRequestService.Create(reservationRequest)
 	if err != nil {
 		return nil, err
@@ -164,7 +165,7 @@ func (handler *ReservationHandler) DenyReservationRequest(ctx context.Context, r
 
 func (handler *ReservationHandler) CancelReservation(ctx context.Context, request *pb.GetByIdAndUserIdRequest) (*pb.ReservationResponse, error) {
 	id := request.Id
-	userId := request.UserId
+	userId := request.UserIdDto.UserId
 	log.Printf("Canceling request with id %s and userId %s ", id, userId)
 	err := handler.ReservationService.Cancel(id, userId)
 	if err != nil {

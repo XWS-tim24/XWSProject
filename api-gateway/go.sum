@@ -1,7 +1,5 @@
-github.com/XWS-tim24/Common/common v0.0.0-20230515000857-6fe8d9d92149 h1:Uu6sBMtU8P2CXZy+pvbyta+ViYVHqC5dmo5/pFwDA2o=
-github.com/XWS-tim24/Common/common v0.0.0-20230515000857-6fe8d9d92149/go.mod h1:E+b61UtmbAqj4jBpQkZcXczoImnRJIfN0wffpLdnvCw=
-github.com/XWS-tim24/Common/common v0.0.0-20230515005301-df9dc253cac0 h1:U31mAWtClpOgGE5a/spSGyFL6+O5rPYKEnhrx8qe9+c=
-github.com/XWS-tim24/Common/common v0.0.0-20230515005301-df9dc253cac0/go.mod h1:E+b61UtmbAqj4jBpQkZcXczoImnRJIfN0wffpLdnvCw=
+github.com/XWS-tim24/Common/common v0.0.0-20230515224928-f81c0c5d6fd4 h1:kYL2eYMDKZZCgCrU3pDu3bVhYI7DeVI6yONb4FTkz/E=
+github.com/XWS-tim24/Common/common v0.0.0-20230515224928-f81c0c5d6fd4/go.mod h1:E+b61UtmbAqj4jBpQkZcXczoImnRJIfN0wffpLdnvCw=
 github.com/golang/glog v1.1.0 h1:/d3pCKDPWNnvIWe0vVUpNP32qc8U3PDVxySP/y360qE=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=
 github.com/golang/protobuf v1.5.3 h1:KhyjKVUg7Usr/dYsdSqoFveMYd5ko72D+zANwlG1mmg=

@@ -3,6 +3,7 @@ package handler
 import (
 	"Accomodation-Service/domain"
 	"Accomodation-Service/dto"
+
 	pb "github.com/XWS-tim24/Common/common/proto/accommodation_service"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -14,6 +15,7 @@ func mapToPbAccommodation(accommodation *domain.Accommodation) *pb.Accommodation
 		Name:            accommodation.Name,
 		City:            accommodation.City,
 		Address:         accommodation.Address,
+		Benefits:        accommodation.Benefits,
 		MinGuests:       accommodation.MinGuests,
 		MaxGuests:       accommodation.MaxGuests,
 		AutomaticAccept: accommodation.AutomaticAccept,
@@ -28,6 +30,7 @@ func mapToAccommodation(accPb *pb.Accommodation) *domain.Accommodation {
 		Name:            accPb.Name,
 		City:            accPb.City,
 		Address:         accPb.Address,
+		Benefits:        accPb.Benefits,
 		MinGuests:       accPb.MinGuests,
 		MaxGuests:       accPb.MaxGuests,
 		AutomaticAccept: accPb.AutomaticAccept,

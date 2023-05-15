@@ -60,14 +60,16 @@ service AccommodationReservationService{
 
         rpc DenyReservationRequest(GetByIdRequest) returns(ReservationRequestResponse) {
           option (google.api.http) = {
-      put: "/reservationRequests/deny/{id}"
-    };
-  }
+                        put: "/reservationRequests/deny/{id}"
+                };
+        }
         rpc CancelReservation(GetByIdAndUserIdRequest) returns(ReservationResponse) {
         	option (google.api.http) = {
 			put: "/reservations/cancel/{id}"
+                        body: "userIdDto"
 		};
         }
+
       
         rpc AlreadyReservedForDate(AlreadyReservedForDateRequest) returns(AlreadyReservedForDateResponse) {
         	option (google.api.http) = {
@@ -136,8 +138,13 @@ message GetByIdRequest {
 }
 message GetByIdAndUserIdRequest {
         string id = 1;
-        string userId = 2;
+        UserIdDto userIdDto = 2;
 }
+
+message UserIdDto {
+        string userId = 1;
+}
+
 message GetByIdResponse {
         ReservationRequest reservationRequest = 1;
 }
