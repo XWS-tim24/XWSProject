@@ -57,11 +57,22 @@ router.get('/currentUser', authorization, async (req: AuthRequest, res: Response
 
 router.get('/currentUserID', authorization, async (req: AuthRequest, res: Response) => {
   let user : IUser | null;
+  
   user = await User.findById(req.user._id).select('-password -__v');
   if(!user) return res.status(400).send("Bad request!");
   
   return res.send(user.id);
 });
+
+router.get('/getUserByID/:id', async (req: Request, res: Response) => {
+  let user : IUser | null;
+  const id = req.params["id"]
+  user = await User.findById(id).select('-password -__v');
+  if(!user) return res.status(400).send("Bad request!");
+  
+  return res.send(user);
+});
+
 
 router.put('/updateProfile', authorization, async (req: AuthRequest, res: Response) => {
   let user : IUser | null;
