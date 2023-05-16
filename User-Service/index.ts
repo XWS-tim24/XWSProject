@@ -7,7 +7,7 @@ import cors from 'cors';
 const app = express();
 
 mongoose
-  .connect("mongodb://127.0. 0.1:27017/Users")
+  .connect("mongodb://172.17.0.1:27017/Users")
   .then(() => console.log("Connected to MongoDB..."))
   .catch((err) => console.error(`Could not connect to MongoDB... + ${err}`));
 

@@ -9,11 +9,14 @@ services:
       dockerfile: ./User-Service/Dockerfile
     restart: on-failure
     environment:
-      USER_SERVICE_PORT: ${USER_SERVICE_PORT}
+      USER_SERVICE_PORT: "5000:5000"
     depends_on:
       - user_db
     networks:
       - network
+    ports:
+      - "5000:5000"
+
   accommodation_service:
     image: accommodation_service
     container_name: accommodation_service
@@ -78,8 +81,11 @@ services:
     image: mongo
     container_name: user_db
     restart: on-failure
+    ports:
+      - "27017:27017"
     networks:
       - network
+
 
   accommodation_db:
     image: postgres
