@@ -60,8 +60,8 @@ func (repo *ReservationRequestRepository) Delete(id string) error {
 // ZA FRONT
 func (repo *ReservationRequestRepository) GetAllPendingForUser(userId string) *[]domain.ReservationRequest {
 	var pending_requests []domain.ReservationRequest
-	query := `SELECT * FROM reservation_requests WHERE status = ? AND user_id = ?`
-	stmt := repo.DatabaseConnection.Raw(query, domain.Pending, userId)
+	query := `SELECT * FROM reservation_requests WHERE status = ? AND user_id = ? and deleted = ?`
+	stmt := repo.DatabaseConnection.Raw(query, domain.Pending, userId, false)
 	stmt.Scan(&pending_requests)
 	return &pending_requests
 }
