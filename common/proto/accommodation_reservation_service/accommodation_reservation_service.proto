@@ -95,7 +95,7 @@ service AccommodationReservationService{
     };
   }
 
-  rpc GetAllReservationsForAllAccommodations(GetByIdRequest) returns(GetAllReservationsForAccommodationResponse) {
+  rpc GetAllAcceptedReservationsForAccommodation(GetByIdRequest) returns(GetAllReservationsForAccommodationResponse) {
     option (google.api.http) = {
       get: "/reservations/getAllForAccommodation/{id}"
     };
