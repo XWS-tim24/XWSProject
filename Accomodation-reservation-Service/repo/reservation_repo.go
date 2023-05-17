@@ -77,7 +77,7 @@ func (repo *ReservationRepository) GetAllAcceptedReservationsForAccommodation(ac
 	var reservations []domain.Reservation
 	result := repo.DatabaseConnection.Model(&domain.Reservation{}).
 		Joins("JOIN reservation_requests ON reservations.request_id = reservation_requests.id").
-		Where(`reservation_requests.accomodation_id = ? reservations.status = ?`, accId, domain.Active).
+		Where(`reservation_requests.accomodation_id = ? and reservations.status = ?`, accId, domain.Active).
 		Find(&reservations)
 
 	if result.Error != nil {
