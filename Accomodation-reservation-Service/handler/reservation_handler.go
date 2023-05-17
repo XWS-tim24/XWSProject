@@ -223,18 +223,30 @@ func (handler *ReservationHandler) GetAllRequests(ctx context.Context, request *
 	}
 	return response, nil
 }
-func (handler *ReservationHandler) GetAllAcceptedReservationsForUser(ctx context.Context, request *pb.GetAllAcceptedReservationsForUserRequest) (*pb.GetAllReservationsResponse, error) {
-	reservations, err := handler.ReservationService.GetAllAcceptedReservationsForUser(request.UserId)
-	if err != nil || *reservations == nil {
+func (handler *ReservationHandler) GetAllAcceptedReservationsForUser(ctx context.Context, request *pb.GetByIdRequest) (*pb.GetAllReservationsForUserResponse, error) {
+	reservations, err := handler.ReservationService.GetAllAcceptedReservationsForUser(request.Id)
+	if err != nil {
 		return nil, err
 	}
-	response := &pb.GetAllReservationsResponse{
-		Reservations: []*pb.Reservation{},
+	response := &pb.GetAllReservationsForUserResponse{
+		ReservationDTO: reservations,
 	}
-	for _, reservation := range *reservations {
-		current := mapToReservationPb(&reservation)
-		response.Reservations = append(response.Reservations, current)
+
+	return response, nil
+}
+
+func (handler *ReservationHandler) GetAllAcceptedReservationsForAccommodation(ctx context.Context, request *pb.GetByIdRequest) (*pb.GetAllReservationsForAccommodationResponse, error) {
+	reservations, err := handler.ReservationService.GetAllAcceptedReservationsForAccommodation(request.Id)
+	if err != nil {
+		return nil, err
 	}
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllReservationsForAccommodationResponse{
+		ReservationDTO: reservations,
+	}
+
 	return response, nil
 }
 

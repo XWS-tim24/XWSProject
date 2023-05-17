@@ -18,3 +18,15 @@ func MapToReservationRequestDTOPb(reservationRequest *domain.ReservationRequest)
 	}
 	return reservationRequestPb
 }
+
+func MapToReservationDTOPb(reservation *domain.Reservation, reservationRequest *domain.ReservationRequest, accommodationName string) *pb.ReservationDTO {
+	reservationRequestPb := &pb.ReservationDTO{
+		Id:                reservation.Id.String(),
+		RequestId:         reservation.RequestId,
+		UserId:            reservationRequest.UserId,
+		StartDate:         timestamppb.New(reservationRequest.StartDate),
+		EndDate:           timestamppb.New(reservationRequest.EndDate),
+		AccommodationName: accommodationName,
+	}
+	return reservationRequestPb
+}

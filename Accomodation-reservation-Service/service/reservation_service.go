@@ -1,9 +1,14 @@
 package service
 
 import (
+	"Accomodation-reservation-Service/communication"
 	"Accomodation-reservation-Service/domain"
+	"Accomodation-reservation-Service/mapper"
 	"Accomodation-reservation-Service/repo"
+	"context"
 	"fmt"
+	pbReservations "github.com/XWS-tim24/Common/common/proto/accommodation_reservation_service"
+	pb "github.com/XWS-tim24/Common/common/proto/accommodation_service"
 	"time"
 )
 
@@ -73,6 +78,52 @@ func (service *ReservationService) canCancel(reservation *domain.Reservation, us
 	return true, nil
 }
 
-func (service *ReservationService) GetAllAcceptedReservationsForUser(userId string) (*[]domain.Reservation, error) {
-	return service.ReservationRepo.GetAllAcceptedReservationsForUser(userId)
+func (service *ReservationService) GetAllAcceptedReservationsForUser(userId string) ([]*pbReservations.ReservationDTO, error) {
+	reservations, err := service.ReservationRepo.GetAllAcceptedReservationsForUser(userId)
+	if err != nil {
+		return nil, err
+	}
+	reservationDtos := []*pbReservations.ReservationDTO{}
+	accommodationClient := communication.NewAccommodationClient(service.AccommodationServiceAddres)
+	for _, reserv := range *reservations {
+		req, err := service.ReservationRequestRepo.GetById(reserv.RequestId)
+		if err != nil {
+			return nil, err
+		}
+		pbRequest := pb.GetByIdRequest{Id: req.AccomodationId}
+		acc, err1 := accommodationClient.GetAccommodationById(context.TODO(), &pbRequest)
+		if err1 != nil {
+			return nil, err1
+		}
+
+		reservationDTO := mapper.MapToReservationDTOPb(&reserv, &req, acc.Accommodation.Name)
+		reservationDtos = append(reservationDtos, reservationDTO)
+	}
+
+	return reservationDtos, nil
+}
+
+func (service *ReservationService) GetAllAcceptedReservationsForAccommodation(accId string) ([]*pbReservations.ReservationDTO, error) {
+	reservations, err := service.ReservationRepo.GetAllAcceptedReservationsForAccommodation(accId)
+	if err != nil {
+		return nil, err
+	}
+	reservationDtos := []*pbReservations.ReservationDTO{}
+	accommodationClient := communication.NewAccommodationClient(service.AccommodationServiceAddres)
+	for _, reserv := range *reservations {
+		req, err := service.ReservationRequestRepo.GetById(reserv.RequestId)
+		if err != nil {
+			return nil, err
+		}
+		pbRequest := pb.GetByIdRequest{Id: req.AccomodationId}
+		acc, err1 := accommodationClient.GetAccommodationById(context.TODO(), &pbRequest)
+		if err1 != nil {
+			return nil, err1
+		}
+
+		reservationDTO := mapper.MapToReservationDTOPb(&reserv, &req, acc.Accommodation.Name)
+		reservationDtos = append(reservationDtos, reservationDTO)
+	}
+
+	return reservationDtos, nil
 }

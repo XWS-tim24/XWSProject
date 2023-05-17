@@ -35,6 +35,8 @@ func (service *AccommodationService) Search(accommodationSearchDTO *dto.Accommod
 	accommodations := service.AccommodationRepository.Search(accommodationSearchDTO)
 	searchResponses := []dto.AccommodationSearchDTOResponse{}
 	numberOfDays := uint16(accommodationSearchDTO.EndDate.Sub(accommodationSearchDTO.StartDate).Hours())
+	fmt.Println("Number of days: ", numberOfDays)
+	fmt.Println("Guest number: ", accommodationSearchDTO.GuestNum)
 	for _, acc := range *accommodations {
 		availableDate, err := service.AvailableRepository.GetAvailableDateForAccommodationAndTimeSlot(acc.Id.String(), accommodationSearchDTO.StartDate, accommodationSearchDTO.EndDate)
 		if err != nil {

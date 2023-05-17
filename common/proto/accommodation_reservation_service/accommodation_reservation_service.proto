@@ -90,17 +90,28 @@ service AccommodationReservationService{
       };
     }
 
-  rpc GetAllAcceptedReservationsForUser(GetAllAcceptedReservationsForUserRequest) returns(GetAllReservationsResponse) {
+  rpc GetAllAcceptedReservationsForUser(GetByIdRequest) returns(GetAllReservationsForUserResponse) {
     option (google.api.http) = {
-      get: "/reservations/getAllAcceptedForUser/{userId}"
+      get: "/reservations/getAllAcceptedForUser/{id}"
+    };
+  }
+
+  rpc GetAllReservationsForAccommodation(GetByIdRequest) returns(GetAllReservationsForAccommodationResponse) {
+    option (google.api.http) = {
+      get: "/reservations/getAllForAccommodation/{id}"
     };
   }
 
 }
 
-message GetAllAcceptedReservationsForUserRequest {
-  string userId = 1;
+message GetAllReservationsForAccommodationResponse{
+  repeated  ReservationDTO ReservationDTO = 1;
 }
+message GetAllReservationsForUserResponse{
+  repeated  ReservationDTO ReservationDTO = 1;
+}
+
+
 
 message GetAllRequest {
 }
@@ -227,6 +238,22 @@ message Reservation {
         }
         ReservationStatus Status = 3;
 }
+
+message ReservationDTO {
+  string Id = 1;
+  string RequestId = 2;
+  enum ReservationStatus{
+    Active = 0;
+    Canceled = 1;
+  }
+  ReservationStatus Status = 3;
+  string UserId = 4;
+  string AccommodationName = 5;
+  google.protobuf.Timestamp StartDate = 6;
+  google.protobuf.Timestamp EndDate = 7;
+}
+
+
 
 message DateAndAccomodationDTO{
         string accommodationId = 1;
