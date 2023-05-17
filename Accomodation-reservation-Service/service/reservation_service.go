@@ -72,3 +72,7 @@ func (service *ReservationService) canCancel(reservation *domain.Reservation, us
 	}
 	return true, nil
 }
+
+func (service *ReservationService) GetAllAcceptedReservationsForUser(userId string) (*[]domain.Reservation, error) {
+	return service.ReservationRepo.GetAllAcceptedReservationsForUser(userId)
+}

@@ -68,3 +68,9 @@ func (repo *AvailableDateRepository) TimeSlotAvailableForAccommodation(accommoda
 	result := repo.DatabaseConnection.First(&domain.AvailableDate{}, "accommodation_id = ? and ? >= start_date and ? <= end_date", accommodationId, startTime, endTime)
 	return result.Error == nil
 }
+
+func (repo *AvailableDateRepository) GetAvailableDateForAccommodationAndTimeSlot(accommodationId string, startTime time.Time, endTime time.Time) (*domain.AvailableDate, error) {
+	availableDate := &domain.AvailableDate{}
+	result := repo.DatabaseConnection.First(availableDate, "accommodation_id = ? and ? >= start_date and ? <= end_date", accommodationId, startTime, endTime)
+	return availableDate, result.Error
+}

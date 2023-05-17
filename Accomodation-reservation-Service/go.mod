@@ -2,6 +2,8 @@ module Accomodation-reservation-Service
 
 go 1.20
 
+replace github.com/XWS-tim24/Common/common => ../common
+
 require (
 	github.com/XWS-tim24/Common/common v0.0.0-20230515224928-f81c0c5d6fd4
 	github.com/google/uuid v1.3.0

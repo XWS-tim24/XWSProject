@@ -15,12 +15,18 @@ type Config struct {
 
 func NewConfig() *Config {
 	return &Config{
-		Port:                   os.Getenv("ACCOMMODATION_SERVICE_PORT"),
+		Port:   "8080",
+		DBHost: "localhost",
+		DBPort: "5432",
+		DBName: "AccommodationServiceDB",
+		DBUser: "postgres",
+		DBPass: "loki123",
+		/*Port:                   os.Getenv("ACCOMMODATION_SERVICE_PORT"),
 		DBHost:                 os.Getenv("ACCOMMODATION_DB_HOST"),
 		DBPort:                 os.Getenv("ACCOMMODATION_DB_PORT"),
 		DBName:                 os.Getenv("ACCOMMODATION_DB_NAME"),
 		DBUser:                 os.Getenv("ACCOMMODATION_DB_USER"),
-		DBPass:                 os.Getenv("ACCOMMODATION_DB_PASS"),
+		DBPass:                 os.Getenv("ACCOMMODATION_DB_PASS"),*/
 		ReservationServiceHost: os.Getenv("ACCOMMODATION_RESERVATION_SERVICE_HOST"),
 		ReservationServicePort: os.Getenv("ACCOMMODATION_RESERVATION_SERVICE_PORT"),
 	}

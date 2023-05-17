@@ -60,6 +60,18 @@ func (repo *ReservationRepository) GetNumberOfCanceled(userId string) int64 {
 	stmt.Scan(&number_of_canceled)
 	return number_of_canceled
 }
+func (repo *ReservationRepository) GetAllAcceptedReservationsForUser(userId string) (*[]domain.Reservation, error) {
+	var reservations []domain.Reservation
+	result := repo.DatabaseConnection.Model(&domain.Reservation{}).
+		Joins("JOIN reservation_requests ON reservations.request_id = reservation_requests.id").
+		Where(`reservation_requests.user_id = ? `, userId).
+		Find(&reservations)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &reservations, nil
+}
 
 // POMOCNE
 /*

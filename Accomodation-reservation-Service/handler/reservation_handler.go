@@ -221,6 +221,20 @@ func (handler *ReservationHandler) GetAllRequests(ctx context.Context, request *
 	}
 	return response, nil
 }
+func (handler *ReservationHandler) GetAllAcceptedReservationsForUser(ctx context.Context, request *pb.GetAllAcceptedReservationsForUserRequest) (*pb.GetAllReservationsResponse, error) {
+	reservations, err := handler.ReservationService.GetAllAcceptedReservationsForUser(request.UserId)
+	if err != nil || *reservations == nil {
+		return nil, err
+	}
+	response := &pb.GetAllReservationsResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range *reservations {
+		current := mapToReservationPb(&reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
 
 /*rpc DeleteReservationRequest(GetByIdRequest) returns(ReservationRequestResponse) {
         	option (google.api.http) = {

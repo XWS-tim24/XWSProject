@@ -63,7 +63,7 @@ func (server *Server) Start() {
 
 	reservationServiceAddress := fmt.Sprintf("%s:%s", server.config.ReservationServiceHost, server.config.ReservationServicePort)
 	availableDateService := &service.AvailableDateService{AvailableDateRepository: availableDateRepository, AccommodationRepository: accommodationRepository, ReservationServiceAddress: reservationServiceAddress}
-	accommodationService := &service.AccommodationService{AccommodationRepository: accommodationRepository}
+	accommodationService := &service.AccommodationService{AccommodationRepository: accommodationRepository, AvailableRepository: availableDateRepository}
 
 	accommodationHandler := &handler.AccommodationHandler{AccommodationService: accommodationService, AvailableDateService: availableDateService}
 	server.startGrpcServer(accommodationHandler)

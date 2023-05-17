@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"Accomodation-Service/mapper"
 	"Accomodation-Service/service"
 	"context"
 	"encoding/json"
@@ -17,7 +18,7 @@ type AccommodationHandler struct {
 }
 
 func (handler *AccommodationHandler) CreateAcc(ctx context.Context, pbAcc *pb.CreateAccommodationRequest) (*pb.CreateAccommodationResponse, error) {
-	accommodation := mapToAccommodation(pbAcc.Accommodation)
+	accommodation := mapper.MapToAccommodation(pbAcc.Accommodation)
 	println("Body:")
 
 	acc, err := handler.AccommodationService.Create(accommodation)
@@ -25,7 +26,7 @@ func (handler *AccommodationHandler) CreateAcc(ctx context.Context, pbAcc *pb.Cr
 		return nil, err
 	}
 	resp := &pb.CreateAccommodationResponse{}
-	resp.Accommodation = mapToPbAccommodation(acc)
+	resp.Accommodation = mapper.MapToPbAccommodation(acc)
 	return resp, nil
 }
 
@@ -38,31 +39,34 @@ func (handler *AccommodationHandler) GetAccommodationById(ctx context.Context, r
 	if err != nil {
 		return nil, err
 	}
-	pbAccommodation := mapToPbAccommodation(accommodation)
+	pbAccommodation := mapper.MapToPbAccommodation(accommodation)
 	return &pb.CreateAccommodationResponse{Accommodation: pbAccommodation}, nil
 }
 
 func (handler *AccommodationHandler) SearchAccommodations(ctx context.Context, req *pb.SearchRequest) (*pb.SearchResponse, error) {
 
-	accommodationSearchDTO := mapAccommodationSearchDTO(req.AccommodationSearchDTO)
+	accommodationSearchDTO := mapper.MapAccommodationSearchDTO(req.AccommodationSearchDTO)
 	println("Body:")
 	accStr, _ := json.Marshal(accommodationSearchDTO)
 	println(string(accStr))
 
-	accommodations := handler.AccommodationService.Search(accommodationSearchDTO)
-	response := &pb.SearchResponse{
-		Accommodation: []*pb.Accommodation{},
+	searchResponses, err := handler.AccommodationService.Search(accommodationSearchDTO)
+	if err != nil {
+		return nil, err
 	}
-	for _, acc := range *accommodations {
-		current := mapToPbAccommodation(&acc)
-		response.Accommodation = append(response.Accommodation, current)
+	response := &pb.SearchResponse{
+		AccommodationDto: []*pb.AccommodationDTOForSearchResponse{},
+	}
+	for _, acc := range *searchResponses {
+		current := mapper.MapSearchResponseToPbResponse(&acc)
+		response.AccommodationDto = append(response.AccommodationDto, current)
 	}
 	return response, nil
 }
 
 func (handler *AccommodationHandler) CreateAvailableDate(ctx context.Context, pbAvailableDate *pb.CreateAvailableDateRequest) (*pb.CreateAvailableDateResponse, error) {
 
-	availableDate := mapToAvailableDate(pbAvailableDate.AvailableDate)
+	availableDate := mapper.MapToAvailableDate(pbAvailableDate.AvailableDate)
 
 	availableDate, err := handler.AvailableDateService.Create(availableDate)
 	if err != nil {
@@ -70,7 +74,7 @@ func (handler *AccommodationHandler) CreateAvailableDate(ctx context.Context, pb
 		return nil, err
 	}
 	resp := pb.CreateAvailableDateResponse{}
-	resp.AvailableDate = mapToAvailableDatePb(availableDate)
+	resp.AvailableDate = mapper.MapToAvailableDatePb(availableDate)
 	return &resp, nil
 }
 
@@ -83,14 +87,14 @@ func (handler *AccommodationHandler) GetAvailableDateById(ctx context.Context, r
 		return nil, err
 	}
 
-	availableDatePb := mapToAvailableDatePb(availableDate)
+	availableDatePb := mapper.MapToAvailableDatePb(availableDate)
 	return &pb.CreateAvailableDateResponse{AvailableDate: availableDatePb}, nil
 }
 
 func (handler *AccommodationHandler) UpdateAvailableDate(ctx context.Context, req *pb.UpdateAvailableDateRequest) (*pb.UpdateAvailableDateResponse, error) {
 	id := req.Id
 
-	availableDateDto := mapToAvailableDateDTO(req.AvailableDatedto)
+	availableDateDto := mapper.MapToAvailableDateDTO(req.AvailableDatedto)
 
 	err := handler.AvailableDateService.Update(id, availableDateDto)
 	if err != nil {
@@ -101,7 +105,7 @@ func (handler *AccommodationHandler) UpdateAvailableDate(ctx context.Context, re
 }
 
 func (handler *AccommodationHandler) TimeSlotAvailableForAccommodation(ctx context.Context, req *pb.TimeSlotAvailableRequest) (*pb.TimeSlotAvailableResponse, error) {
-	dto := mapToTimeSlotAvailableDTO(req.AvailableTimeSlotDTO)
+	dto := mapper.MapToTimeSlotAvailableDTO(req.AvailableTimeSlotDTO)
 	fmt.Println("Is Time slot availble :id", dto.AccommodationId)
 	fmt.Println(" startDate:", dto.StartDate)
 	fmt.Println(" Enddate:", dto.EndDate)
@@ -137,7 +141,7 @@ func (handler *AccommodationHandler) GetAllAccommodation(ctx context.Context, re
 		Accommodations: []*pb.Accommodation{},
 	}
 	for _, reservation := range *accomodations {
-		current := mapToPbAccommodation(&reservation)
+		current := mapper.MapToPbAccommodation(&reservation)
 		response.Accommodations = append(response.Accommodations, current)
 	}
 	return response, nil
@@ -152,7 +156,7 @@ func (handler *AccommodationHandler) GetAllAvailableDates(ctx context.Context, r
 		AvailableDates: []*pb.AvailableDate{},
 	}
 	for _, reservationRequest := range *dates {
-		current := mapToAvailableDatePb(&reservationRequest)
+		current := mapper.MapToAvailableDatePb(&reservationRequest)
 		response.AvailableDates = append(response.AvailableDates, current)
 	}
 	return response, nil

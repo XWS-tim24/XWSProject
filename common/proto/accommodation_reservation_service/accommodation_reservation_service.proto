@@ -78,18 +78,28 @@ service AccommodationReservationService{
 		};
         }
 
-  rpc GetAllReservations(GetAllRequest) returns(GetAllReservationsResponse) {
+    rpc GetAllReservations(GetAllRequest) returns(GetAllReservationsResponse) {
+      option (google.api.http) = {
+        get: "/reservations"
+      };
+    }
+
+    rpc GetAllRequests(GetAllRequest) returns(GetAllRequestsResponse) {
+      option (google.api.http) = {
+        get: "/reservationRequests"
+      };
+    }
+
+  rpc GetAllAcceptedReservationsForUser(GetAllAcceptedReservationsForUserRequest) returns(GetAllReservationsResponse) {
     option (google.api.http) = {
-      get: "/reservations"
+      get: "/reservations/getAllAcceptedForUser/{userId}"
     };
   }
 
-  rpc GetAllRequests(GetAllRequest) returns(GetAllRequestsResponse) {
-    option (google.api.http) = {
-      get: "/reservationRequests"
-    };
-  }
+}
 
+message GetAllAcceptedReservationsForUserRequest {
+  string userId = 1;
 }
 
 message GetAllRequest {
