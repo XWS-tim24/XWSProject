@@ -34,7 +34,7 @@ func (service *AccommodationService) GetById(id string) (*domain.Accommodation, 
 func (service *AccommodationService) Search(accommodationSearchDTO *dto.AccommodationSearchDTO) (*[]dto.AccommodationSearchDTOResponse, error) {
 	accommodations := service.AccommodationRepository.Search(accommodationSearchDTO)
 	searchResponses := []dto.AccommodationSearchDTOResponse{}
-	numberOfDays := uint16(accommodationSearchDTO.EndDate.Sub(accommodationSearchDTO.StartDate).Hours())
+	numberOfDays := uint16(accommodationSearchDTO.EndDate.Sub(accommodationSearchDTO.StartDate).Hours() / 24)
 	fmt.Println("Number of days: ", numberOfDays)
 	fmt.Println("Guest number: ", accommodationSearchDTO.GuestNum)
 	for _, acc := range *accommodations {

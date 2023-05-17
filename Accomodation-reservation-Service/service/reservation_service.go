@@ -101,8 +101,8 @@ func (service *ReservationService) GetAllAcceptedReservationsForUser(userId stri
 	return reservationDtos, nil
 }
 
-func (service *ReservationService) GetAllAcceptedReservationsForAllAccommodations(userId string) ([]*pbReservations.ReservationDTO, error) {
-	reservations, err := service.ReservationRepo.GetAllAcceptedReservationsForAllAccommodations(userId)
+func (service *ReservationService) GetAllAcceptedReservationsForAllAccommodations(accId string) ([]*pbReservations.ReservationDTO, error) {
+	reservations, err := service.ReservationRepo.GetAllAcceptedReservationsForAllAccommodations(accId)
 	if err != nil {
 		return nil, err
 	}
