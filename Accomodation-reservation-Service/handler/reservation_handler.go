@@ -167,9 +167,7 @@ func (handler *ReservationHandler) DenyReservationRequest(ctx context.Context, r
 
 func (handler *ReservationHandler) CancelReservation(ctx context.Context, request *pb.GetByIdAndUserIdRequest) (*pb.ReservationResponse, error) {
 	id := request.Id
-	userId := request.UserIdDto.UserId
-	log.Printf("Canceling request with id %s and userId %s ", id, userId)
-	err := handler.ReservationService.Cancel(id, userId)
+	err := handler.ReservationService.Cancel(id)
 	if err != nil {
 		return nil, err
 	}
@@ -235,8 +233,8 @@ func (handler *ReservationHandler) GetAllAcceptedReservationsForUser(ctx context
 	return response, nil
 }
 
-func (handler *ReservationHandler) GetAllAcceptedReservationsForAccommodation(ctx context.Context, request *pb.GetByIdRequest) (*pb.GetAllReservationsForAccommodationResponse, error) {
-	reservations, err := handler.ReservationService.GetAllAcceptedReservationsForAccommodation(request.Id)
+func (handler *ReservationHandler) GetAllAcceptedReservationsForAllAccommodations(ctx context.Context, request *pb.GetByIdRequest) (*pb.GetAllReservationsForAccommodationResponse, error) {
+	reservations, err := handler.ReservationService.GetAllAcceptedReservationsForAllAccommodations(request.Id)
 	if err != nil {
 		return nil, err
 	}

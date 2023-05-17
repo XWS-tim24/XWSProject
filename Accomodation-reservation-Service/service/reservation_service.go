@@ -38,13 +38,13 @@ func (service *ReservationService) Create(reservation *domain.Reservation) error
 	return nil
 }
 
-func (service *ReservationService) Cancel(id string, userId string) error {
+func (service *ReservationService) Cancel(id string) error {
 	reservation, err := service.GetById(id)
 	if err != nil {
 		print("error during canceling reservation, reservation with id %s not found", id)
 		return err
 	}
-	allowed, err2 := service.canCancel(reservation, userId)
+	allowed, err2 := service.canCancel(reservation)
 	if !allowed {
 		return err2
 	}
@@ -62,16 +62,14 @@ func (service *ReservationService) GetNumberOfCanceled(userId string) int64 {
 	return number_of_canceled
 }
 
-func (service *ReservationService) canCancel(reservation *domain.Reservation, userId string) (bool, error) {
+func (service *ReservationService) canCancel(reservation *domain.Reservation) (bool, error) {
 	//number_of_canceled := service.ReservationRepo.GetNumberOfCanceled(userId)
 	reservationRequest, err := service.ReservationRequestRepo.GetById(reservation.RequestId)
 	if err != nil {
 		print("error during canceling reservation, reservation request id not found")
 		return false, err
 	}
-	if reservationRequest.UserId != userId {
-		return false, fmt.Errorf(fmt.Sprintf("Not allowed to cancel reservation for other users, reservation id %s", reservation.Id))
-	}
+
 	if reservationRequest.StartDate.Before(time.Now()) {
 		return false, fmt.Errorf(fmt.Sprintf("Not allowed to cancel reservation previous dates, reservation id %s", reservation.Id))
 	}
@@ -103,8 +101,8 @@ func (service *ReservationService) GetAllAcceptedReservationsForUser(userId stri
 	return reservationDtos, nil
 }
 
-func (service *ReservationService) GetAllAcceptedReservationsForAccommodation(accId string) ([]*pbReservations.ReservationDTO, error) {
-	reservations, err := service.ReservationRepo.GetAllAcceptedReservationsForAccommodation(accId)
+func (service *ReservationService) GetAllAcceptedReservationsForAllAccommodations(userId string) ([]*pbReservations.ReservationDTO, error) {
+	reservations, err := service.ReservationRepo.GetAllAcceptedReservationsForAllAccommodations(userId)
 	if err != nil {
 		return nil, err
 	}
