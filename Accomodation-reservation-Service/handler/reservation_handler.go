@@ -80,15 +80,17 @@ func (handler *ReservationHandler) CreateRequest(ctx context.Context, request *p
 
 func (handler *ReservationHandler) GetAllPendingForUser(ctx context.Context, request *pb.GetByUserIdRequest) (*pb.GetAllPendingForUserResponse, error) {
 	userId := request.UserId
-	pending_requests := handler.ReservationRequestService.GetAllPendingForUser(userId)
+	pendingRequestsDtos, err := handler.ReservationRequestService.GetAllPendingForUser(userId)
+	if err != nil {
+		return &pb.GetAllPendingForUserResponse{}, err
+	}
 
 	response := &pb.GetAllPendingForUserResponse{
-		ReservationRequest: []*pb.ReservationRequest{},
+		ReservationRequest: []*pb.GetAllPendingForUserDTO{},
 	}
 	///PROVERI OVE POKAZIVACE
-	for _, reservationRequest := range *pending_requests {
-		current := mapToReservationRequestPb(&reservationRequest)
-		response.ReservationRequest = append(response.ReservationRequest, current)
+	for _, reservationRequestDto := range *pendingRequestsDtos {
+		response.ReservationRequest = append(response.ReservationRequest, &reservationRequestDto)
 	}
 	return response, nil
 

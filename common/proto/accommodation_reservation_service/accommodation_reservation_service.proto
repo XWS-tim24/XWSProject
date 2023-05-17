@@ -168,7 +168,7 @@ message GetByUserIdRequest {
 }
 
 message GetAllPendingForUserResponse {
-        repeated ReservationRequest reservationRequest = 1;
+        repeated GetAllPendingForUserDTO reservationRequest = 1;
 }
 
 message GetAllPendingForAccRequest {
@@ -199,6 +199,23 @@ message ReservationRequest {
         }
         ReservationRequestStatus Status = 7;
         bool deleted = 8;
+}
+
+message GetAllPendingForUserDTO {
+  string Id = 1;
+  string UserId = 2;
+  string AccommodationId = 3;
+  string AccommodationName = 4;
+  google.protobuf.Timestamp StartDate = 5;
+  google.protobuf.Timestamp EndDate = 6;
+  uint32 NumberOfGuests = 7;
+  enum ReservationRequestStatus{
+    Pending = 0;
+    Accepted = 1;
+    Denied = 2;
+  }
+  ReservationRequestStatus Status = 8;
+  bool deleted = 9;
 }
 
 message Reservation {

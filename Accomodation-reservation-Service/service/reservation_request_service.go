@@ -3,9 +3,11 @@ package service
 import (
 	"Accomodation-reservation-Service/communication"
 	"Accomodation-reservation-Service/domain"
+	"Accomodation-reservation-Service/mapper"
 	"Accomodation-reservation-Service/repo"
 	"context"
 	"fmt"
+	pbReservations "github.com/XWS-tim24/Common/common/proto/accommodation_reservation_service"
 	pb "github.com/XWS-tim24/Common/common/proto/accommodation_service"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
@@ -140,8 +142,22 @@ func (service *ReservationRequestService) Delete(id string) error {
 }
 
 // METODE ZA FRONT
-func (service *ReservationRequestService) GetAllPendingForUser(userId string) *[]domain.ReservationRequest {
-	return service.ReservationRequestRepo.GetAllPendingForUser(userId)
+// Trebalo bi
+func (service *ReservationRequestService) GetAllPendingForUser(userId string) (*[]pbReservations.GetAllPendingForUserDTO, error) {
+	requests := service.ReservationRequestRepo.GetAllPendingForUser(userId)
+	accommodationClient := communication.NewAccommodationClient(service.AccommodationServiceAddres)
+	pendingRequestsDtos := []pbReservations.GetAllPendingForUserDTO{}
+	for _, req := range *requests {
+		pbRequest := pb.GetByIdRequest{Id: req.AccomodationId}
+		acc, err := accommodationClient.GetAccommodationById(context.TODO(), &pbRequest)
+		if err != nil {
+			return nil, err
+		}
+		pendingRequestDto := mapper.MapToReservationRequestDTOPb(&req)
+		pendingRequestDto.AccommodationName = acc.Accommodation.Name
+		pendingRequestsDtos = append(pendingRequestsDtos, *pendingRequestDto)
+	}
+	return &pendingRequestsDtos, nil
 }
 
 func (service *ReservationRequestService) GetAllPendingForAccomodation(userId string) *[]domain.ReservationRequest {
