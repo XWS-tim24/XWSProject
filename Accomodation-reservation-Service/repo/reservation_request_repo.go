@@ -68,8 +68,8 @@ func (repo *ReservationRequestRepository) GetAllPendingForUser(userId string) *[
 
 func (repo *ReservationRequestRepository) GetAllPendingForAccomodation(accomodationId string) *[]domain.ReservationRequest {
 	var pending_requests []domain.ReservationRequest
-	query := `SELECT * FROM reservation_requests WHERE status = ? AND accomodation_id = ?`
-	stmt := repo.DatabaseConnection.Raw(query, domain.Pending, accomodationId)
+	query := `SELECT * FROM reservation_requests WHERE status = ? AND accomodation_id = ? and deleted = ?`
+	stmt := repo.DatabaseConnection.Raw(query, domain.Pending, accomodationId, false)
 	stmt.Scan(&pending_requests)
 	return &pending_requests
 }
