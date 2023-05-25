@@ -65,12 +65,19 @@ router.get('/currentUserID', authorization, async (req: AuthRequest, res: Respon
 });
 
 router.get('/getUserByID/:id', async (req: Request, res: Response) => {
-  let user : IUser | null;
-  const id = req.params["id"]
-  user = await User.findById(id).select('-password -__v');
-  if(!user) return res.status(400).send("Bad request!");
+  console.log(req.params["id"])
+  try {
+    const id = req.params["id"];
+    const user = await User.findById(id).select('-password -__v');
   
-  return res.send(user);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+  
+    return res.send(user);
+  } catch (error) {
+    return res.status(500).send(`Internal Server Error: ${error}`);
+  }
 });
 
 
