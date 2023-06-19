@@ -11,7 +11,7 @@ type AccommodationRating struct {
 	Id              uuid.UUID `json:"id"`
 	AccommodationId string    `json:"accommodationId" gorm:"not null"`
 	UserId          string    `json:"userId" gorm:"not null"`
-	Value           int32     `json:"value" gorm:"not null"`
+	Value           uint32    `json:"value" gorm:"not null"`
 	Date            time.Time `json:"date" gorm:"not null"`
 }
 

@@ -2,7 +2,10 @@ module Rating-Service
 
 go 1.20
 
+replace github.com/XWS-tim24/Common/common => ../common
+
 require (
+	github.com/XWS-tim24/Common/common v0.0.0-00010101000000-000000000000
 	github.com/google/uuid v1.3.0
 	google.golang.org/grpc v1.56.0
 	gorm.io/driver/postgres v1.5.2
@@ -11,6 +14,7 @@ require (
 
 require (
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.3.1 // indirect

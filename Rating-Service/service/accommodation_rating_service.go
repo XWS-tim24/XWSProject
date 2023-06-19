@@ -22,7 +22,7 @@ func (service *AccommodationRatingService) GetById(id string) (*domain.Accommoda
 	return &rating, nil
 }
 
-func (service *AccommodationRatingService) Create(rating *domain.HostRating) error {
+func (service *AccommodationRatingService) Create(rating *domain.AccommodationRating) error {
 	err := service.AccommodationRatingRepo.Create(rating)
 	if err != nil {
 		return err
