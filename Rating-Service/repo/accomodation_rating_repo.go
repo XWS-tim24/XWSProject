@@ -22,7 +22,7 @@ func (repo *AccommodationRatingRepository) GetAll() (*[]domain.AccommodationRati
 func (repo *AccommodationRatingRepository) GetById(id string) (domain.AccommodationRating, error) {
 	rating := domain.AccommodationRating{}
 	dbResult := repo.DatabaseConnection.First(&rating, "id = ?", id)
-	if dbResult != nil {
+	if dbResult.Error != nil {
 		return rating, dbResult.Error
 	}
 	return rating, nil
