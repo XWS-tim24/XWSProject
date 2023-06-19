@@ -22,7 +22,7 @@ func (repo *HostRatingRepository) GetAll() (*[]domain.HostRating, error) {
 func (repo *HostRatingRepository) GetById(id string) (domain.HostRating, error) {
 	rating := domain.HostRating{}
 	dbResult := repo.DatabaseConnection.First(&rating, "id = ?", id)
-	if dbResult != nil {
+	if dbResult.Error != nil {
 		return rating, dbResult.Error
 	}
 	return rating, nil
