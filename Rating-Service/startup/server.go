@@ -4,6 +4,7 @@ import (
 	"Rating-Service/domain"
 	"Rating-Service/handler"
 	"Rating-Service/repo"
+	"Rating-Service/service"
 	"Rating-Service/startup/config"
 	"fmt"
 	"log"
@@ -58,15 +59,17 @@ func (server *Server) Start() {
 	postgresClient := server.initPostgresClient()
 
 	accommodationRatingRepository := &repo.AccommodationRatingRepository{DatabaseConnection: postgresClient}
+	hostRatingRepository := &repo.AccommodationRatingRepository{DatabaseConnection: postgresClient}
+
 	//accommodationRepository := &repo.AccommodationRepository{DatabaseConnection: postgresClient}
 
 	//reservationServiceAddress := fmt.Sprintf("%s:%s", server.config.ReservationServiceHost, server.config.ReservationServicePort)
-	/*availableDateService := &service.AvailableDateService{AvailableDateRepository: availableDateRepository, AccommodationRepository: accommodationRepository, ReservationServiceAddress: reservationServiceAddress}
-	accommodationService := &service.AccommodationService{AccommodationRepository: accommodationRepository, AvailableRepository: availableDateRepository}
-
-	accommodationHandler := &handler.AccommodationHandler{AccommodationService: accommodationService, AvailableDateService: availableDateService}
-	server.startGrpcServer(accommodationHandler)
-	fmt.Println("Finished")*/
+	accommodationRatingService := &service.AccommodationRatingService{AccommodationRatingRepository: accommodationRatingRepository}
+	accommodationService := &service.HostRatingService{HostRatingRepository: hostRatingRepository}
+	/*
+		accommodationHandler := &handler.AccommodationHandler{AccommodationService: accommodationService, AvailableDateService: availableDateService}
+		server.startGrpcServer(accommodationHandler)
+		fmt.Println("Finished")*/
 }
 
 func (server *Server) startGrpcServer(accommodationHandler *handler.AccommodationHandler) {
